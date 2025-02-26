@@ -59,6 +59,8 @@ dependencies {
 
     // Dependency Injection (Hilt)
     implementation("com.google.dagger:hilt-android:2.48")
+    implementation(libs.androidx.navigation.testing)
+    testImplementation(libs.junit.jupiter)
     kapt("com.google.dagger:hilt-android-compiler:2.48")
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
 
@@ -84,7 +86,7 @@ dependencies {
     testImplementation("io.mockk:mockk:1.13.7")
     testImplementation("org.mockito:mockito-core:5.6.0")
     testImplementation("com.squareup.okhttp3:mockwebserver:5.0.0-alpha.12")
-
+    androidTestImplementation ("androidx.navigation:navigation-testing:2.5.3")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.6.3")
