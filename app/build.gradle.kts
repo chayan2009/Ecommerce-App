@@ -57,7 +57,13 @@ dependencies {
     implementation("androidx.compose.material:material:1.6.3")
     implementation("androidx.navigation:navigation-compose:2.7.5")
 
-    // Dependency Injection (Hilt)
+        // Room Database
+        implementation("androidx.room:room-runtime:2.6.1") // Use latest version
+        implementation("androidx.room:room-ktx:2.6.1") // Kotlin Extensions for Room
+        kapt("androidx.room:room-compiler:2.6.1") // Annotation Processor for Room
+
+
+        // Dependency Injection (Hilt)
     implementation("com.google.dagger:hilt-android:2.48")
     implementation(libs.androidx.navigation.testing)
     testImplementation(libs.junit.jupiter)
@@ -67,6 +73,12 @@ dependencies {
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+
+        implementation("com.google.accompanist:accompanist-pager:0.33.1-alpha")
+        implementation("com.google.accompanist:accompanist-pager-indicators:0.33.1-alpha") // Optional for dots
+    implementation ("com.google.accompanist:accompanist-navigation-animation:0.32.0")
+    //coil
+    implementation ("io.coil-kt:coil-compose:2.5.0")
 
     // WorkManager
     implementation("androidx.work:work-runtime-ktx:2.8.1")

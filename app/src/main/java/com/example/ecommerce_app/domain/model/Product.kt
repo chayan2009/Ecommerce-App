@@ -1,9 +1,16 @@
 package com.example.ecommerce_app.domain.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "Product") // Ensure correct table name
 data class Product(
+    @PrimaryKey
     val id: Int,
     val title: String,
     val price: Double,
     val description: String,
-    val image: String
+    val category: String,
+    val image: String,
 )
+

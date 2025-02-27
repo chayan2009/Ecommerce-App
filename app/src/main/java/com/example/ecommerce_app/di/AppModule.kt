@@ -1,5 +1,9 @@
 package com.example.ecommerce_app.di
 
+import android.content.Context
+import androidx.room.Room
+import com.example.ecommerce_app.core.database.AppDatabase
+import com.example.ecommerce_app.data.db.ProductDao
 import com.example.ecommerce_app.data.repository.ProductRepositoryImpl
 import com.example.ecommerce_app.data.source.api.ProductApi
 import com.example.ecommerce_app.domain.repository.ProductRepository
@@ -37,4 +41,18 @@ object AppModule {
     @Singleton
     fun provideProductUseCase(repository: ProductRepository): GetProductsUseCase =
         GetProductsUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideDatabase(context: Context): AppDatabase {
+        return Room.databaseBuilder(
+            context.applicationContext,
+            AppDatabase::class.java,
+            "ecommerce_db"
+        ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideProductDao(db: AppDatabase): ProductDao = db.productDao()
 }

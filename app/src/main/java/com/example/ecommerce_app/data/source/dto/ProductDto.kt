@@ -7,7 +7,21 @@ data class ProductDto(
     val title: String,
     val price: Double,
     val description: String,
+    val category: String,
     val image: String
 ) {
-    fun toDomain(): Product = Product(id, title, price, description, image)
+
+    fun toDomain(): Product {
+        return Product(
+            id = id,
+            title = title,
+            price = price,
+            description = description,
+            category = category,
+            image = image
+        )
+    }
+
 }
+
+

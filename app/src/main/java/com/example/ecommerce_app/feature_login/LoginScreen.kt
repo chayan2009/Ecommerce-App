@@ -33,7 +33,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -46,6 +45,7 @@ import com.example.ecommerce_app.navigation.Screen
 fun LoginScreen(navController: NavHostController) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.align(Alignment.TopStart)) {
             IconButton(
@@ -94,7 +94,7 @@ fun LoginScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = {
-                    navController.navigate(Screen.SignUpScreen.route)
+                    navController.navigate(Screen.MainScreen.route)
                 },
                 shape = RoundedCornerShape(24.dp),
                 modifier = Modifier.fillMaxWidth()
