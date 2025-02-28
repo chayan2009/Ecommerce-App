@@ -3,6 +3,7 @@ package com.example.ecommerce_app.feature_product.presentation.screen
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -21,13 +22,16 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.ecommerce_app.domain.model.Product
 import com.example.ecommerce_app.feature_product.presentation.viewmodel.ProductViewModel
 import com.google.accompanist.pager.*
-import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ProductListScreen(viewModel: ProductViewModel = hiltViewModel()) {
     val products by viewModel.products.collectAsState()
+    val categories by viewModel.selectedCategory.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
+    var selectedCategory by remember { mutableStateOf("All") }
+
+    val filteredProducts = if (selectedCategory == "All") products else products.filter { it.category == selectedCategory }
 
     Scaffold(topBar = { ProductTopBar() }) { paddingValues ->
         Box(
@@ -42,17 +46,16 @@ fun ProductListScreen(viewModel: ProductViewModel = hiltViewModel()) {
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    // Banner Section
                     item {
-                        BannerSection(products.map { it.image })
+                        CategoryFilter(
+                            categories = viewModel.categories.collectAsState().value,  // ✅ Now a List<String>
+                            selectedCategory = viewModel.selectedCategory.collectAsState().value
+                        ) { category ->
+                            viewModel.onCategorySelected(category)  // ✅ Update ViewModel state
+                        }
                     }
-
-                    // Recommended Products Section
-                    item {
-                        RecommendedProductsSection(products)
-                    }
-
-                    // Product Grid Section inside LazyColumn
+                    item { BannerSection(filteredProducts.map { it.image }) }
+                    item { RecommendedProductsSection(filteredProducts) }
                     item {
                         Text(
                             text = "All Products",
@@ -60,7 +63,6 @@ fun ProductListScreen(viewModel: ProductViewModel = hiltViewModel()) {
                             modifier = Modifier.padding(16.dp)
                         )
                     }
-
                     item {
                         LazyVerticalGrid(
                             columns = GridCells.Fixed(2),
@@ -69,9 +71,9 @@ fun ProductListScreen(viewModel: ProductViewModel = hiltViewModel()) {
                             verticalArrangement = Arrangement.spacedBy(8.dp),
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .height(600.dp) // Set proper height to prevent infinite constraints
+                                .height(600.dp)
                         ) {
-                            items(products) { product ->
+                            items(filteredProducts) { product ->
                                 ProductCard(product)
                             }
                         }
@@ -81,6 +83,33 @@ fun ProductListScreen(viewModel: ProductViewModel = hiltViewModel()) {
         }
     }
 }
+
+@Composable
+fun CategoryFilter(categories: List<String>, selectedCategory: String, onCategorySelected: (String) -> Unit) {
+    LazyRow(contentPadding = PaddingValues(16.dp)) {
+        items(listOf("All") + categories) { category ->
+            CategoryChip(category, selectedCategory == category) { onCategorySelected(category) }
+        }
+    }
+}
+
+@Composable
+fun CategoryChip(category: String, isSelected: Boolean, onClick: () -> Unit) {
+    val backgroundColor = if (isSelected) MaterialTheme.colors.primary else MaterialTheme.colors.surface
+    val textColor = if (isSelected) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
+
+    Box(
+        modifier = Modifier
+            .padding(8.dp)
+            .background(backgroundColor, shape = MaterialTheme.shapes.medium)
+            .clickable { onClick() }
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(text = category, color = textColor)
+    }
+}
+
 
 
 // Top App Bar

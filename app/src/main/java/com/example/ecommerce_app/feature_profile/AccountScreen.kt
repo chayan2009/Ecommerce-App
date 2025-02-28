@@ -21,14 +21,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.ecommerce_app.R
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.LocationOn
+import androidx.compose.material.icons.filled.*
 
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun AccountScreen(navController: NavController) {
     var username by remember { mutableStateOf("John Doe") }
     var email by remember { mutableStateOf("john.doe@example.com") }
 
@@ -39,41 +35,29 @@ fun ProfileScreen(navController: NavController) {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // Profile Picture
-        Image(
-            painter = painterResource(id = R.drawable.image),
-            contentDescription = "Profile Picture",
-            modifier = Modifier
-                .size(100.dp)
-                .background(Color.Gray, CircleShape)
-        )
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Username & Email
-        Text(text = username, fontSize = 22.sp, fontWeight = FontWeight.Bold)
-        Text(text = email, fontSize = 16.sp, color = Color.Gray)
+        // Profile Section (User Info)
+        ProfileHeader(username, email)
 
         Spacer(modifier = Modifier.height(24.dp))
 
-        val options = listOf(
-            ProfileOption("Edit Profile", Icons.Default.Person),
-            ProfileOption("Settings", Icons.Default.Settings),
-            ProfileOption("Favorites", Icons.Default.Favorite),
-            ProfileOption("Address Book", Icons.Default.LocationOn)
+        val accountOptions = listOf(
+            AccountOption("Profile", Icons.Default.Person) { navController.navigate("profile") },
+            AccountOption("Notifications", Icons.Default.Notifications) { navController.navigate("notifications") },
+            AccountOption("Orders", Icons.Default.ShoppingCart) { navController.navigate("orders") },
+            AccountOption("Address Book", Icons.Default.LocationOn) { navController.navigate("address") },
+            AccountOption("Help Center", Icons.Default.AccountBox) { navController.navigate("help") },
+            AccountOption("Settings", Icons.Default.Settings) { navController.navigate("settings") }
         )
 
-        // Profile Options List
+        // Account Options List
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
                 .background(Color.White)
         ) {
-            items(options) { option ->
-                ProfileOptionItem(title = option.title, icon = option.icon) {
-                    // Handle option click
-                }
+            items(accountOptions) { option ->
+                AccountOptionItem(option.title, option.icon, option.onClick)
             }
         }
 
@@ -93,11 +77,31 @@ fun ProfileScreen(navController: NavController) {
     }
 }
 
-// Data class for Profile Options
-data class ProfileOption(val title: String, val icon: androidx.compose.ui.graphics.vector.ImageVector)
-
+// Profile Header
 @Composable
-fun ProfileOptionItem(title: String, icon: androidx.compose.ui.graphics.vector.ImageVector, onClick: () -> Unit) {
+fun ProfileHeader(username: String, email: String) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Image(
+            painter = painterResource(id = R.drawable.image),
+            contentDescription = "Profile Picture",
+            modifier = Modifier
+                .size(100.dp)
+                .background(Color.Gray, CircleShape)
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Text(text = username, fontSize = 22.sp, fontWeight = FontWeight.Bold)
+        Text(text = email, fontSize = 16.sp, color = Color.Gray)
+    }
+}
+
+// Data class for Account Options
+data class AccountOption(val title: String, val icon: androidx.compose.ui.graphics.vector.ImageVector, val onClick: () -> Unit)
+
+// Account Option Item
+@Composable
+fun AccountOptionItem(title: String, icon: androidx.compose.ui.graphics.vector.ImageVector, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -113,7 +117,7 @@ fun ProfileOptionItem(title: String, icon: androidx.compose.ui.graphics.vector.I
         ) {
             Icon(
                 imageVector = icon,
-                contentDescription = "Profile Icon",
+                contentDescription = "Option Icon",
                 tint = Color(0xFF6200EA),
                 modifier = Modifier.size(24.dp)
             )
