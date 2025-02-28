@@ -19,14 +19,25 @@ class ProductViewModel @Inject constructor(
     private val _products = MutableStateFlow<List<Product>>(emptyList())
     val products: StateFlow<List<Product>> = _products
 
+    private val _isLoading = MutableStateFlow(true)
+    val isLoading: StateFlow<Boolean> = _isLoading
+
+
     init {
         fetchProducts()
     }
 
     private fun fetchProducts() {
         viewModelScope.launch {
-            getProductsUseCase().collect { productList ->
-                _products.value = productList
+            _isLoading.value = true
+            try {
+                getProductsUseCase().collect{productList->
+                    _products.value=productList
+                }
+            } catch (e: Exception) {
+                _isLoading.value = false
+            } finally {
+                _isLoading.value = false
             }
         }
     }

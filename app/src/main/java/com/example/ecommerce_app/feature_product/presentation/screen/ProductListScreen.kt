@@ -1,16 +1,19 @@
 package com.example.ecommerce_app.feature_product.presentation.screen
+
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -18,79 +21,60 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.ecommerce_app.domain.model.Product
 import com.example.ecommerce_app.feature_product.presentation.viewmodel.ProductViewModel
 import com.google.accompanist.pager.*
-import kotlinx.coroutines.delay
-import kotlin.math.max
-import kotlin.math.min
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ProductListScreen(viewModel: ProductViewModel = hiltViewModel()) {
     val products by viewModel.products.collectAsState()
-    val scrollState = rememberLazyListState()
+    val isLoading by viewModel.isLoading.collectAsState()
 
-    // Parallax Effect Calculation
-    val maxOffset = 200f
-    val scrollOffset = min(scrollState.firstVisibleItemScrollOffset.toFloat(), maxOffset)
-    val alpha = max(1f - (scrollOffset / maxOffset), 0f)
-
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Products") },
-                backgroundColor = Color.White.copy(alpha = alpha)
-            )
-        }
-    ) {
-        LazyColumn(
-            state = scrollState,
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(16.dp)
+    Scaffold(topBar = { ProductTopBar() }) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
         ) {
-            // Banner Section
-            item {
-                Card(
-                    elevation = 6.dp,
-                    modifier = Modifier.fillMaxWidth()
+            if (isLoading) {
+                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    BannerPager(products.map { it.image })
-                }
-            }
+                    // Banner Section
+                    item {
+                        BannerSection(products.map { it.image })
+                    }
 
-            // Recommended Products Section
-            item {
-                Card(
-                    elevation = 6.dp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp)
-                ) {
-                    Column(modifier = Modifier.padding(16.dp)) {
+                    // Recommended Products Section
+                    item {
+                        RecommendedProductsSection(products)
+                    }
+
+                    // Product Grid Section inside LazyColumn
+                    item {
                         Text(
-                            text = "Recommended for You",
-                            style = MaterialTheme.typography.h6
+                            text = "All Products",
+                            style = MaterialTheme.typography.h6,
+                            modifier = Modifier.padding(16.dp)
                         )
-                        LazyRow(
-                            modifier = Modifier.fillMaxWidth(),
-                            contentPadding = PaddingValues(vertical = 8.dp)
+                    }
+
+                    item {
+                        LazyVerticalGrid(
+                            columns = GridCells.Fixed(2),
+                            contentPadding = PaddingValues(horizontal = 8.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(600.dp) // Set proper height to prevent infinite constraints
                         ) {
-                            items(products.take(5)) { product ->
-                                RecommendedProductCard(product)
+                            items(products) { product ->
+                                ProductCard(product)
                             }
                         }
-                    }
-                }
-            }
-
-            // Product Grid Section (Fixed Issue ✅)
-            items(products.chunked(2)) { rowProducts ->
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    rowProducts.forEach { product ->
-                        ProductGridCard(product)
                     }
                 }
             }
@@ -98,30 +82,35 @@ fun ProductListScreen(viewModel: ProductViewModel = hiltViewModel()) {
     }
 }
 
-// Banner Pager with Auto Scroll & Dots
+
+// Top App Bar
+@Composable
+fun ProductTopBar() {
+    TopAppBar(
+        title = { Text("Products") },
+        backgroundColor = MaterialTheme.colors.primary
+    )
+}
+
+// Banner Section with ViewPager
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun BannerPager(images: List<String>) {
+fun BannerSection(images: List<String>) {
     val pagerState = rememberPagerState()
 
-    LaunchedEffect(Unit) {
-        while (true) {
-            delay(3000) // Auto-scroll every 3 seconds
-//            val nextPage = (pagerState.currentPage + 1) % images.size
-         //   pagerState.animateScrollToPage(nextPage)
-        }
-    }
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = "Featured Banners",
+            style = MaterialTheme.typography.h6,
+            modifier = Modifier.padding(16.dp)
+        )
 
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth()
-    ) {
         HorizontalPager(
             count = images.size,
             state = pagerState,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(200.dp)
+                .height(180.dp)
         ) { page ->
             Image(
                 painter = rememberAsyncImagePainter(model = images[page]),
@@ -131,26 +120,48 @@ fun BannerPager(images: List<String>) {
             )
         }
 
-        // Pager Dots Indicator
-        HorizontalPagerIndicator(
-            pagerState = pagerState,
-            modifier = Modifier.padding(8.dp),
-            activeColor = Color.Black,
-            inactiveColor = Color.Gray
+        // Indicator Dots
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            repeat(images.size) { index ->
+                val color = if (pagerState.currentPage == index) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface.copy(alpha = 0.3f)
+                Box(
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .size(8.dp)
+                        .background(color, shape = MaterialTheme.shapes.small)
+                )
+            }
+        }
+    }
+}
+
+// Recommended Products Section with Horizontal List
+@Composable
+fun RecommendedProductsSection(products: List<Product>) {
+    Column(modifier = Modifier.fillMaxWidth()) {
+        Text(
+            text = "Recommended for You",
+            style = MaterialTheme.typography.h6,
+            modifier = Modifier.padding(16.dp)
         )
+
+        LazyRow(contentPadding = PaddingValues(16.dp)) {
+            items(products.take(5)) { product ->
+                RecommendedProductCard(product)
+            }
+        }
     }
 }
 
 // Recommended Product Card
 @Composable
 fun RecommendedProductCard(product: Product) {
-    Card(
-        modifier = Modifier
-            .width(150.dp)
-            .padding(8.dp),
-        elevation = 6.dp,
-        backgroundColor = Color(0xFFFFC107)
-    ) {
+    Card(elevation = 6.dp, modifier = Modifier.padding(8.dp)) {
         Column(
             modifier = Modifier.padding(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -159,42 +170,37 @@ fun RecommendedProductCard(product: Product) {
                 painter = rememberAsyncImagePainter(model = product.image),
                 contentDescription = product.title,
                 contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(80.dp)
-                    .padding(4.dp)
+                modifier = Modifier.size(80.dp)
             )
-            Text(text = product.title, style = MaterialTheme.typography.body2, color = Color.Black)
-            Text(text = "$${product.price}", style = MaterialTheme.typography.subtitle1, color = Color.Black)
+            Text(text = product.title, style = MaterialTheme.typography.body2)
+            Text(text = "$${product.price}", style = MaterialTheme.typography.subtitle1)
         }
     }
 }
 
-// Product Grid Card
+// Product Card for Grid Layout
 @Composable
-fun ProductGridCard(product: Product) {
+fun ProductCard(product: Product) {
     Card(
         modifier = Modifier
-            .width(170.dp)
+            .fillMaxWidth()
             .padding(8.dp),
-        elevation = 6.dp,
-        backgroundColor = Color.White
+        elevation = 4.dp
     ) {
-        Column(
-            modifier = Modifier.padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+        Column(modifier = Modifier.padding(8.dp)) {
             Image(
                 painter = rememberAsyncImagePainter(model = product.image),
                 contentDescription = product.title,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(140.dp)
+                    .height(120.dp)
             )
-            Text(text = product.title, style = MaterialTheme.typography.body2)
+            Spacer(modifier = Modifier.height(4.dp))
+            Text(text = product.title, style = MaterialTheme.typography.body1)
             Text(text = "$${product.price}", style = MaterialTheme.typography.subtitle1)
             Button(
-                onClick = { /* Add to Cart Action */ },
+                onClick = { /* Add to Cart */ },
                 modifier = Modifier.padding(top = 4.dp)
             ) {
                 Text("Add to Cart")
