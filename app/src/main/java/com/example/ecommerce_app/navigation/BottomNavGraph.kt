@@ -1,11 +1,11 @@
 package com.example.ecommerce_app.navigation
+import SearchScreen
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.ecommerce_app.feature_product.presentation.screen.ProductListScreen
 import com.example.ecommerce_app.feature_profile.AccountScreen
-import com.example.ecommerce_app.feature_search.SearchScreen
 
 @Composable
 fun BottomNavGraph(navController: NavHostController) {

@@ -1,4 +1,4 @@
-package com.example.ecommerce_app.feature_login
+package com.example.ecommerce_app.feature_signup
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,7 +36,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.ecommerce_app.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

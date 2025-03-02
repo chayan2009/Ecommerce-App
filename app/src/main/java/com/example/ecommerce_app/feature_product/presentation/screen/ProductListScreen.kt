@@ -19,6 +19,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
+import com.example.ecommerce_app.core.common.Appbar
+import com.example.ecommerce_app.core.common.NavigationIconType
 import com.example.ecommerce_app.domain.model.Product
 import com.example.ecommerce_app.feature_product.presentation.viewmodel.ProductViewModel
 import com.google.accompanist.pager.*
@@ -26,6 +28,7 @@ import com.google.accompanist.pager.*
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun ProductListScreen(viewModel: ProductViewModel = hiltViewModel()) {
+
     val products by viewModel.products.collectAsState()
     val categories by viewModel.selectedCategory.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -33,7 +36,7 @@ fun ProductListScreen(viewModel: ProductViewModel = hiltViewModel()) {
 
     val filteredProducts = if (selectedCategory == "All") products else products.filter { it.category == selectedCategory }
 
-    Scaffold(topBar = { ProductTopBar() }) { paddingValues ->
+    Scaffold(topBar = { Appbar("Product", navigationIconType = NavigationIconType.NONE) }) { paddingValues ->
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -108,17 +111,6 @@ fun CategoryChip(category: String, isSelected: Boolean, onClick: () -> Unit) {
     ) {
         Text(text = category, color = textColor)
     }
-}
-
-
-
-// Top App Bar
-@Composable
-fun ProductTopBar() {
-    TopAppBar(
-        title = { Text("Products") },
-        backgroundColor = MaterialTheme.colors.primary
-    )
 }
 
 // Banner Section with ViewPager

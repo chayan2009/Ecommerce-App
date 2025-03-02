@@ -7,7 +7,7 @@ import androidx.navigation.NavHostController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.example.ecommerce_app.feature_login.LoginScreen
-import com.example.ecommerce_app.feature_login.SignUpScreen
+import com.example.ecommerce_app.feature_signup.SignUpScreen
 import com.example.ecommerce_app.feature_splash.SplashScreen
 import com.example.ecommerce_app.feature_welcome.WelcomeScreen
 
