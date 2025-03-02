@@ -15,9 +15,9 @@ class ProductRepositoryImpl @Inject constructor(
     override suspend fun getProducts(): Flow<List<Product>> = flow {
         try {
             val response = api.getProducts()
-            emit(response.map { it.toDomain() }) // Convert DTO to Domain Model
+            emit(response.map { it.toDomain() })
         } catch (e: Exception) {
-            emit(emptyList()) // Handle error case
+            emit(emptyList())
         }
     }
 

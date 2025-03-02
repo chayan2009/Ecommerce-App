@@ -4,10 +4,13 @@ import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.example.ecommerce_app.feature_login.LoginScreen
-import com.example.ecommerce_app.feature_signup.SignUpScreen
+import com.example.ecommerce_app.feature_product.presentation.screen.ProductDetailsScreen
+import com.example.ecommerce_app.feature_signup.presentation.SignUpScreen
 import com.example.ecommerce_app.feature_splash.SplashScreen
 import com.example.ecommerce_app.feature_welcome.WelcomeScreen
 
@@ -90,5 +93,24 @@ fun AppNavigation(navController: NavHostController) {
         ) {
             MainScreen()
         }
+
+//        composable(
+//            route = Screen.ProductDetailsScreen.route,
+//            enterTransition = { enterTransition },
+//            exitTransition = { exitTransition },
+//            popEnterTransition = { popEnterTransition },
+//            popExitTransition = { popExitTransition }
+//        ) {
+//            ProductDetailsScreen(navController, productId)
+//        }
+        composable(
+            route = Screen.ProductDetailsScreen.route,
+            arguments = listOf(navArgument("productId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val productId = backStackEntry.arguments?.getInt("productId") ?: 0
+            ProductDetailsScreen(navController, productId)
+        }
+
+
     }
 }

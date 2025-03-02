@@ -7,7 +7,10 @@ import com.example.ecommerce_app.data.db.ProductDao
 import com.example.ecommerce_app.data.repository.ProductRepositoryImpl
 import com.example.ecommerce_app.data.source.api.ProductApi
 import com.example.ecommerce_app.domain.repository.ProductRepository
+import com.example.ecommerce_app.domain.repository.UserRepository
 import com.example.ecommerce_app.domain.usecase.GetProductsUseCase
+import com.example.ecommerce_app.domain.usecase.LoginUserUseCase
+import com.example.ecommerce_app.domain.usecase.RegisterUserUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -41,6 +44,16 @@ object AppModule {
     @Singleton
     fun provideProductUseCase(repository: ProductRepository): GetProductsUseCase =
         GetProductsUseCase(repository)
+
+    @Provides
+    fun provideRegisterUserUseCase(repository: UserRepository): RegisterUserUseCase {
+        return RegisterUserUseCase(repository)
+    }
+
+    @Provides
+    fun provideLoginUserUseCase(repository: UserRepository): LoginUserUseCase {
+        return LoginUserUseCase(repository)
+    }
 
     @Provides
     @Singleton

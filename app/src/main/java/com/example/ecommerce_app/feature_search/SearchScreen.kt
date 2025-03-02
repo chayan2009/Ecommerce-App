@@ -1,4 +1,5 @@
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -27,7 +28,9 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.ecommerce_app.domain.model.Product
 import com.example.ecommerce_app.feature_search.viewmodel.SearchViewModel
-
+import com.google.gson.Gson
+import android.util.Base64
+import android.util.Log
 @Composable
 fun SearchScreen(
      navController: NavController,
@@ -46,24 +49,23 @@ fun SearchScreen(
 
           Spacer(modifier = Modifier.height(8.dp))
 
-          LazyVerticalGrid(
-               columns = GridCells.Fixed(2),
-               modifier = Modifier.fillMaxSize(),
-               contentPadding = PaddingValues(8.dp)
-          ) {
+          LazyVerticalGrid(columns = GridCells.Fixed(2), modifier = Modifier.fillMaxSize()) {
                items(searchItems) { product ->
-                    ProductCard(product, onAddToCart = {})
+                    ProductCard(product, onProductClick = {
+                         navController.navigate(Screen.ProductDetailsScreen.createRoute(product.id))
+                         navController.navigate(Screen.ProductDetailsScreen.route)                    }, onAddToCart = {})
                }
           }
      }
 }
 
 @Composable
-fun ProductCard(product: Product, onAddToCart: () -> Unit) {
+fun ProductCard(product: Product, onProductClick: () -> Unit, onAddToCart: () -> Unit) {
      Card(
           modifier = Modifier
                .padding(8.dp)
-               .fillMaxWidth(),
+               .fillMaxWidth()
+               .clickable { onProductClick() },
           elevation = 6.dp,
           shape = RoundedCornerShape(12.dp)
      ) {
@@ -72,46 +74,20 @@ fun ProductCard(product: Product, onAddToCart: () -> Unit) {
                     painter = rememberAsyncImagePainter(model = product.image),
                     contentDescription = product.title,
                     contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                         .fillMaxWidth()
-                         .height(120.dp)
-                         .clip(RoundedCornerShape(8.dp))
+                    modifier = Modifier.fillMaxWidth().height(120.dp).clip(RoundedCornerShape(8.dp))
                )
 
                Spacer(modifier = Modifier.height(8.dp))
 
-               Text(
-                    text = product.title,
-                    style = MaterialTheme.typography.h6.copy(
-                         fontWeight = FontWeight.Bold,
-                         fontSize = 16.sp
-                    ),
-                    modifier = Modifier.padding(vertical = 4.dp)
-               )
+               Text(text = product.title, fontSize = 16.sp, fontWeight = FontWeight.Bold)
 
                Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                    horizontalArrangement = Arrangement.SpaceBetween
                ) {
-                    Text(
-                         text = "$${product.price}",
-                         style = MaterialTheme.typography.subtitle1.copy(
-                              fontWeight = FontWeight.Bold,
-                              fontSize = 14.sp,
-                              color = Color(0xFF388E3C)
-                         )
-                    )
-
-                    IconButton(
-                         onClick = onAddToCart,
-                         modifier = Modifier.size(32.dp)
-                    ) {
-                         Icon(
-                              imageVector = Icons.Filled.ShoppingCart,
-                              contentDescription = "Add to Cart",
-                              tint = Color(0xFFFF9800)
-                         )
+                    Text(text = "$${product.price}", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.Green)
+                    IconButton(onClick = onAddToCart) {
+                         Icon(Icons.Filled.ShoppingCart, contentDescription = "Add to Cart", tint = Color(0xFFFF9800))
                     }
                }
           }

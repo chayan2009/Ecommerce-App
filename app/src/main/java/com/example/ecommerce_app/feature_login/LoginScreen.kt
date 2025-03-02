@@ -38,7 +38,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.ecommerce_app.navigation.Screen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
