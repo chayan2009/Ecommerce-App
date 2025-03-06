@@ -1,6 +1,8 @@
 package com.example.ecommerce_app.feature_profile
 
+import Screen
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -35,6 +37,7 @@ import com.example.ecommerce_app.core.common.NavigationIconType
 import com.example.ecommerce_app.feature_profile.presentation.AccountOptionItem
 import com.example.ecommerce_app.feature_profile.presentation.ProfileHeader
 import com.example.ecommerce_app.feature_profile.viewmodel.AccountOptionViewModel
+import com.example.ecommerce_app.navigation.BottomNavItem
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -79,7 +82,9 @@ fun AccountScreen(
             Row (modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Bottom){
                 Button(
-                    onClick = { /* Handle Logout */ },
+                        onClick = {
+                            Log.d("Navigation", "Navigating to: ${Screen.LoginScreen.route}")
+                            navController.navigate(Screen.LoginScreen.route) {}                        },
                     modifier = Modifier.padding(bottom = 100.dp)
                         .fillMaxWidth()
                         .height(50.dp),

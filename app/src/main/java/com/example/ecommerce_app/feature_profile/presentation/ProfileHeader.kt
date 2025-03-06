@@ -23,7 +23,7 @@ fun ProfileHeader(username: String, email: String, phoneNumber: String) {
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Image(
-            painter = painterResource(id = R.drawable.image),
+            painter = painterResource(id = R.drawable.ic_launcher_background),
             contentDescription = "Profile Picture",
             modifier = Modifier
                 .size(100.dp)

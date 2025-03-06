@@ -31,6 +31,8 @@ import com.example.ecommerce_app.feature_search.viewmodel.SearchViewModel
 import com.google.gson.Gson
 import android.util.Base64
 import android.util.Log
+import com.example.ecommerce_app.feature_product.presentation.screen.ProductCard
+
 @Composable
 fun SearchScreen(
      navController: NavController,
@@ -52,42 +54,52 @@ fun SearchScreen(
           LazyVerticalGrid(columns = GridCells.Fixed(2), modifier = Modifier.fillMaxSize()) {
                items(searchItems) { product ->
                     ProductCard(product, onProductClick = {
-                         navController.navigate(Screen.ProductDetailsScreen.createRoute(product.id))
-                         navController.navigate(Screen.ProductDetailsScreen.route)                    }, onAddToCart = {})
+                         navController.navigate("product_details/${product.id}")
+                    })
                }
           }
      }
-}
 
-@Composable
-fun ProductCard(product: Product, onProductClick: () -> Unit, onAddToCart: () -> Unit) {
-     Card(
-          modifier = Modifier
-               .padding(8.dp)
-               .fillMaxWidth()
-               .clickable { onProductClick() },
-          elevation = 6.dp,
-          shape = RoundedCornerShape(12.dp)
-     ) {
-          Column(modifier = Modifier.padding(12.dp)) {
-               Image(
-                    painter = rememberAsyncImagePainter(model = product.image),
-                    contentDescription = product.title,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.fillMaxWidth().height(120.dp).clip(RoundedCornerShape(8.dp))
-               )
+     @Composable
+     fun ProductCard(product: Product, onProductClick: () -> Unit, onAddToCart: () -> Unit) {
+          Card(
+               modifier = Modifier
+                    .padding(8.dp)
+                    .fillMaxWidth()
+                    .clickable { onProductClick() },
+               elevation = 6.dp,
+               shape = RoundedCornerShape(12.dp)
+          ) {
+               Column(modifier = Modifier.padding(12.dp)) {
+                    Image(
+                         painter = rememberAsyncImagePainter(model = product.image),
+                         contentDescription = product.title,
+                         contentScale = ContentScale.Crop,
+                         modifier = Modifier.fillMaxWidth().height(120.dp)
+                              .clip(RoundedCornerShape(8.dp))
+                    )
 
-               Spacer(modifier = Modifier.height(8.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
-               Text(text = product.title, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+                    Text(text = product.title, fontSize = 16.sp, fontWeight = FontWeight.Bold)
 
-               Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-               ) {
-                    Text(text = "$${product.price}", fontSize = 14.sp, fontWeight = FontWeight.Bold, color = Color.Green)
-                    IconButton(onClick = onAddToCart) {
-                         Icon(Icons.Filled.ShoppingCart, contentDescription = "Add to Cart", tint = Color(0xFFFF9800))
+                    Row(
+                         modifier = Modifier.fillMaxWidth(),
+                         horizontalArrangement = Arrangement.SpaceBetween
+                    ) {
+                         Text(
+                              text = "$${product.price}",
+                              fontSize = 14.sp,
+                              fontWeight = FontWeight.Bold,
+                              color = Color.Green
+                         )
+                         IconButton(onClick = onAddToCart) {
+                              Icon(
+                                   Icons.Filled.ShoppingCart,
+                                   contentDescription = "Add to Cart",
+                                   tint = Color(0xFFFF9800)
+                              )
+                         }
                     }
                }
           }

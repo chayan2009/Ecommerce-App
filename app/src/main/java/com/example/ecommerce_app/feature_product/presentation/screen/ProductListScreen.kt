@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.ecommerce_app.core.common.Appbar
 import com.example.ecommerce_app.core.common.NavigationIconType
@@ -27,7 +28,7 @@ import com.google.accompanist.pager.*
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
-fun ProductListScreen(viewModel: ProductViewModel = hiltViewModel()) {
+fun ProductListScreen(navController: NavController, viewModel: ProductViewModel = hiltViewModel()) {
 
     val products by viewModel.products.collectAsState()
     val categories by viewModel.selectedCategory.collectAsState()
@@ -77,7 +78,12 @@ fun ProductListScreen(viewModel: ProductViewModel = hiltViewModel()) {
                                 .height(600.dp)
                         ) {
                             items(filteredProducts) { product ->
-                                ProductCard(product)
+                                ProductCard(
+                                    product,
+                                    onProductClick = {
+                                            navController.navigate("product_details/${product.id}")
+                                    }
+                                )
                             }
                         }
                     }
@@ -201,7 +207,7 @@ fun RecommendedProductCard(product: Product) {
 
 // Product Card for Grid Layout
 @Composable
-fun ProductCard(product: Product) {
+fun ProductCard(product: Product,onProductClick:()->Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -221,7 +227,7 @@ fun ProductCard(product: Product) {
             Text(text = product.title, style = MaterialTheme.typography.body1)
             Text(text = "$${product.price}", style = MaterialTheme.typography.subtitle1)
             Button(
-                onClick = { /* Add to Cart */ },
+                onClick = { onProductClick() },
                 modifier = Modifier.padding(top = 4.dp)
             ) {
                 Text("Add to Cart")

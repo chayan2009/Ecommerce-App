@@ -1,5 +1,6 @@
 package com.example.ecommerce_app.feature_login
 
+import Screen
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -38,6 +39,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import com.example.ecommerce_app.navigation.BottomNavItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -93,8 +95,10 @@ fun LoginScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(16.dp))
             Button(
                 onClick = {
-                    navController.navigate(Screen.MainScreen.route)
-                },
+                    navController.navigate(Screen.MainScreen.route) {
+                        popUpTo(Screen.MainScreen.route) { inclusive = true }
+                    }
+                          },
                 shape = RoundedCornerShape(24.dp),
                 modifier = Modifier.fillMaxWidth()
             ) {

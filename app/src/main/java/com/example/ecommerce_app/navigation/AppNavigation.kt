@@ -3,6 +3,7 @@ package com.example.ecommerce_app.navigation
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
@@ -103,14 +104,6 @@ fun AppNavigation(navController: NavHostController) {
 //        ) {
 //            ProductDetailsScreen(navController, productId)
 //        }
-        composable(
-            route = Screen.ProductDetailsScreen.route,
-            arguments = listOf(navArgument("productId") { type = NavType.IntType })
-        ) { backStackEntry ->
-            val productId = backStackEntry.arguments?.getInt("productId") ?: 0
-            ProductDetailsScreen(navController, productId)
-        }
-
 
     }
 }
