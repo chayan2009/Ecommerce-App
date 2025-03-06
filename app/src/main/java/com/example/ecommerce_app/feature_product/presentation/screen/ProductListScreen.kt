@@ -11,15 +11,23 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.ecommerce_app.R
 import com.example.ecommerce_app.core.common.Appbar
 import com.example.ecommerce_app.core.common.NavigationIconType
 import com.example.ecommerce_app.domain.model.Product
@@ -106,18 +114,27 @@ fun CategoryFilter(categories: List<String>, selectedCategory: String, onCategor
 fun CategoryChip(category: String, isSelected: Boolean, onClick: () -> Unit) {
     val backgroundColor = if (isSelected) MaterialTheme.colors.primary else MaterialTheme.colors.surface
     val textColor = if (isSelected) MaterialTheme.colors.onPrimary else MaterialTheme.colors.onSurface
-
-    Box(
+    androidx.compose.material3.Card(
         modifier = Modifier
-            .padding(8.dp)
-            .background(backgroundColor, shape = MaterialTheme.shapes.medium)
-            .clickable { onClick() }
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        contentAlignment = Alignment.Center
+            .fillMaxWidth()
+            .padding(8.dp),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
-        Text(text = category, color = textColor)
+        Box(
+            modifier = Modifier
+                .padding(8.dp)
+                .background(backgroundColor, shape = MaterialTheme.shapes.medium)
+                .clickable { onClick() }
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(text = category, color = textColor)
+        }
     }
-}
+
+    }
 
 // Banner Section with ViewPager
 @OptIn(ExperimentalPagerApi::class)
@@ -125,51 +142,62 @@ fun CategoryChip(category: String, isSelected: Boolean, onClick: () -> Unit) {
 fun BannerSection(images: List<String>) {
     val pagerState = rememberPagerState()
 
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Text(
-            text = "Featured Banners",
-            style = MaterialTheme.typography.h6,
-            modifier = Modifier.padding(16.dp)
-        )
-
-        HorizontalPager(
-            count = images.size,
-            state = pagerState,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(180.dp)
-        ) { page ->
-            Image(
-                painter = rememberAsyncImagePainter(model = images[page]),
-                contentDescription = "Banner Image",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
+    androidx.compose.material3.Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            Text(
+                text = "Featured Banners",
+                style = MaterialTheme.typography.h6,
+                modifier = Modifier.padding(16.dp)
             )
-        }
 
-        // Indicator Dots
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 8.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            repeat(images.size) { index ->
-                val color = if (pagerState.currentPage == index) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface.copy(alpha = 0.3f)
-                Box(
-                    modifier = Modifier
-                        .padding(4.dp)
-                        .size(8.dp)
-                        .background(color, shape = MaterialTheme.shapes.small)
+            HorizontalPager(
+                count = images.size,
+                state = pagerState,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(180.dp)
+            ) { page ->
+                Image(
+                    painter = rememberAsyncImagePainter(model = images[page]),
+                    contentDescription = "Banner Image",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier.fillMaxSize()
                 )
+            }
+
+            // Indicator Dots
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(top = 8.dp),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                repeat(images.size) { index ->
+                    val color = if (pagerState.currentPage == index) MaterialTheme.colors.primary else MaterialTheme.colors.onSurface.copy(alpha = 0.3f)
+                    Box(
+                        modifier = Modifier
+                            .padding(4.dp)
+                            .size(8.dp)
+                            .background(color, shape = MaterialTheme.shapes.small)
+                    )
+                }
             }
         }
     }
+
 }
 
 // Recommended Products Section with Horizontal List
 @Composable
 fun RecommendedProductsSection(products: List<Product>) {
+
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             text = "Recommended for You",
@@ -184,35 +212,64 @@ fun RecommendedProductsSection(products: List<Product>) {
         }
     }
 }
-
-// Recommended Product Card
 @Composable
 fun RecommendedProductCard(product: Product) {
-    Card(elevation = 6.dp, modifier = Modifier.padding(8.dp)) {
-        Column(
-            modifier = Modifier.padding(8.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(220.dp)
+            .padding(8.dp),
+        shape = RoundedCornerShape(16.dp),
+        elevation = 8.dp,
+    ) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            // Background Image with proper visibility
             Image(
                 painter = rememberAsyncImagePainter(model = product.image),
                 contentDescription = product.title,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier.size(80.dp)
+                contentScale = ContentScale.Crop, // Ensures it covers the available space
+                modifier = Modifier
+                    .aspectRatio(1f)
+                    .clip(RoundedCornerShape(12.dp))
             )
-            Text(text = product.title, style = MaterialTheme.typography.body2)
-            Text(text = "$${product.price}", style = MaterialTheme.typography.subtitle1)
+            // Product Title and Price on Top of Image
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(12.dp),
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.Start
+            ) {
+                Text(
+                    text = product.title,
+                    color = Color.White,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
+                )
+
+                Text(
+                    text = "$${product.price}",
+                    color = Color.Yellow,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
         }
     }
 }
 
+
+
 // Product Card for Grid Layout
 @Composable
 fun ProductCard(product: Product,onProductClick:()->Unit) {
-    Card(
+    androidx.compose.material3.Card(
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp),
-        elevation = 4.dp
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 6.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
         Column(modifier = Modifier.padding(8.dp)) {
             Image(

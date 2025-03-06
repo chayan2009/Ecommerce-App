@@ -1,5 +1,6 @@
 package com.example.ecommerce_app.feature_product.presentation.screen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -22,6 +23,7 @@ import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
 import com.example.ecommerce_app.feature_product.presentation.viewmodel.ProductViewModel
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailsScreen(
@@ -36,7 +38,7 @@ fun ProductDetailsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = "Product Details") },
+                title = { product?.title?.let { Text(text = it) } },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
@@ -44,11 +46,11 @@ fun ProductDetailsScreen(
                 }
             )
         }
-    ) { paddingValues ->
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(16.dp)
         ) {
             if (product == null) {
                 Box(
@@ -69,17 +71,16 @@ fun ProductDetailsScreen(
                         .verticalScroll(scrollState),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Image Section (No weight, fully scrollable)
+                    Spacer(modifier = Modifier.height(20.dp))
                     Image(
                         painter = rememberAsyncImagePainter(model = product.image),
                         contentDescription = product.title,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .aspectRatio(1.5f) // Maintains aspect ratio for adaptive height
+                            .aspectRatio(0.7f)
                     )
 
-                    // Product details section
                     Card(
                         shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
                         modifier = Modifier.fillMaxWidth(),
@@ -98,27 +99,28 @@ fun ProductDetailsScreen(
                                 Icon(
                                     imageVector = Icons.Default.Star,
                                     contentDescription = "Rating",
-                                    tint = Color.Yellow
+                                    tint = Color.Black
                                 )
-                                Text(text = "4.5/5", fontSize = 16.sp, fontWeight = FontWeight.Medium)
+                                Text(text = "4.5/5", fontSize = 18.sp, fontWeight = FontWeight.Medium)
                             }
 
                             Text(
                                 text = "Price: $${product.price}",
                                 fontSize = 20.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = Color.Green
+                                color = Color.Black
                             )
 
                             Text(
                                 text = product.description,
                                 fontSize = 16.sp,
-                                color = Color.Gray
+                                color = Color.Black
                             )
 
                             Button(
-                                onClick = { /* TODO: Add to Cart Logic */ },
-                                modifier = Modifier.fillMaxWidth(),
+                                onClick = {  },
+                                modifier = Modifier.fillMaxWidth().padding(bottom = 20.dp),
+                                shape = RoundedCornerShape(20.dp)
                             ) {
                                 Text(text = "Add to Cart", fontSize = 18.sp, color = Color.White)
                             }

@@ -37,7 +37,6 @@ class ProductViewModel @Inject constructor(
         viewModelScope.launch {
             _isLoading.value = true
             try {
-                // Run both API calls in parallel
                 val productsDeferred = async { fetchProducts() }
                 val categoriesDeferred = async { fetchCategories() }
 
@@ -59,8 +58,8 @@ class ProductViewModel @Inject constructor(
 
     private suspend fun fetchCategories() {
         getProductsUseCase().collect { productList ->
-            val categoryList = productList.map { it.category }.distinct() // ✅ Extract unique categories
-            _categories.value = listOf("All") + categoryList // ✅ Add "All" filter
+            val categoryList = productList.map { it.category }.distinct()
+            _categories.value = categoryList
         }
     }
 
