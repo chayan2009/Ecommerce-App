@@ -1,9 +1,13 @@
 package com.example.ecommerce_app.feature_cart.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+@Entity(tableName = "cart_table")
 data class CartItem(
-    val id: String,
+    @PrimaryKey val id: Int,
     val title: String,
-    val image: String,
     val price: Double,
-    var quantity: Int
+    val image: String
 )
+
