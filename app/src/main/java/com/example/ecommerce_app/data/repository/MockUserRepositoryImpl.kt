@@ -3,26 +3,26 @@ import com.example.ecommerce_app.domain.model.User
 import com.example.ecommerce_app.domain.repository.UserRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import javax.inject.Inject
 
-class MockUserRepositoryImpl : UserRepository {
-
+class MockUserRepositoryImpl  @Inject constructor(): UserRepository {
     private val users = mutableListOf(
-        User(id = "1", name = "chayan", email = "chayan@gmail.com", password = "chayan"),
+        User(name = "chayan",password = "chayan"),
     )
 
     override fun getUsers(): Flow<List<User>> = flow { emit(users) }
 
     override suspend fun getUserByEmail(email: String): User? {
-        return users.find { it.email == email }
+        return users.find { it.name == email }
     }
 
     override suspend fun registerUser(user: User): Boolean {
-        if (users.any { it.email == user.email }) return false
+        if (users.any { it.name == user.name }) return false
         users.add(user)
         return true
     }
 
     override suspend fun login(email: String, password: String): Boolean {
-        return users.any { it.email == email && it.password == password }
+        return users.any { it.name == email && it.password == password }
     }
 }

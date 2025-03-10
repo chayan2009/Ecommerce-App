@@ -5,8 +5,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.navigation.compose.ComposeNavigator
 import androidx.navigation.testing.TestNavHostController
 import com.example.ecommerce_app.MainActivity
-import com.example.ecommerce_app.navigation.Screen.SplashScreen
-import com.example.ecommerce_app.navigation.Screen.LoginScreen
 import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
@@ -27,7 +25,7 @@ class AppNavigationTest {
 
         // Verify starting destination is SplashScreen
         composeTestRule.runOnIdle {
-            assertEquals(SplashScreen.route, navController.currentBackStackEntry?.destination?.route)
+            assertEquals(Screen.SplashScreen.route, navController.currentBackStackEntry?.destination?.route)
         }
 
         // Advance the main clock to simulate the delay in SplashScreen (2000ms)
@@ -36,7 +34,7 @@ class AppNavigationTest {
 
         // Verify that we navigate to LoginScreen after the delay
         composeTestRule.runOnIdle {
-            assertEquals(LoginScreen.route, navController.currentBackStackEntry?.destination?.route)
+            assertEquals(Screen.LoginScreen.route, navController.currentBackStackEntry?.destination?.route)
         }
     }
 }

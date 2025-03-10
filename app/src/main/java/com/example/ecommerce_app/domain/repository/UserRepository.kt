@@ -8,5 +8,5 @@ interface UserRepository {
     fun getUsers(): Flow<List<User>>
     suspend fun getUserByEmail(email: String): User?
     suspend fun registerUser(user: User): Boolean
-    suspend fun login(email: String, password: String): Boolean
+    suspend fun login(user: String, password: String): Boolean
 }

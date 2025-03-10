@@ -1,14 +1,21 @@
 package com.example.ecommerce_app.core.common
 
 object ValidationUtil {
+
     fun validateName(name: String): String? {
-        return if (name.isBlank()) "Name cannot be empty" else null
+        return when {
+            name.isBlank() -> "Name cannot be empty"
+            name.length < 3 -> "Name must be at least 3 characters"
+            !name.all { it.isLetter() || it.isWhitespace() } -> "Name can only contain letters and spaces"
+            else -> null
+        }
     }
 
     fun validateEmail(email: String): String? {
+        val emailRegex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$".toRegex()
         return when {
             email.isBlank() -> "Email cannot be empty"
-            !android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches() -> "Invalid email format"
+            !email.matches(emailRegex) -> "Enter a valid email address"
             else -> null
         }
     }
@@ -16,9 +23,9 @@ object ValidationUtil {
     fun validatePassword(password: String): String? {
         return when {
             password.isBlank() -> "Password cannot be empty"
-            password.length < 6 -> "Password must be at least 6 characters"
-            !password.any { it.isDigit() } -> "Password must contain at least one number"
+            password.length < 4 -> "Password must be at least 3 characters"
             else -> null
         }
     }
 }
+
