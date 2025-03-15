@@ -23,7 +23,6 @@ import com.example.ecommerce_app.feature_cart.viewmodel.CartViewmodel
 @Composable
 fun CartItemRow(cartItem: Cart, cartViewModel: CartViewmodel = hiltViewModel()) {
 
-
         Card(
             modifier = Modifier
                 .fillMaxWidth()
@@ -38,7 +37,6 @@ fun CartItemRow(cartItem: Cart, cartViewModel: CartViewmodel = hiltViewModel()) 
                     .padding(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Product Image
                 Image(
                     painter = rememberAsyncImagePainter(model = cartItem.image),
                     contentDescription = cartItem.title,
@@ -50,7 +48,6 @@ fun CartItemRow(cartItem: Cart, cartViewModel: CartViewmodel = hiltViewModel()) 
 
                 Spacer(modifier = Modifier.width(12.dp))
 
-                // Product Details (Title, Price, Buttons)
                 Column(
                     modifier = Modifier.weight(1f)
                 ) {
@@ -69,7 +66,6 @@ fun CartItemRow(cartItem: Cart, cartViewModel: CartViewmodel = hiltViewModel()) 
                         fontWeight = FontWeight.SemiBold
                     )
 
-                    // Action Buttons (Below Price, Right Aligned)
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.End
@@ -84,6 +80,15 @@ fun CartItemRow(cartItem: Cart, cartViewModel: CartViewmodel = hiltViewModel()) 
                                 tint = Color.Blue
                             )
                         }
+
+                        Text(
+                            text = cartItem.quantity.toString(),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .align(Alignment.CenterVertically)
+                        )
 
                         IconButton(
                             onClick = { cartViewModel.removeCartItem(cartItem.id) },

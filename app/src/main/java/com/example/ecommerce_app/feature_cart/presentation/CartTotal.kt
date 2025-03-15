@@ -9,6 +9,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -20,6 +22,7 @@ import com.example.ecommerce_app.feature_cart.viewmodel.CartViewmodel
 
 @Composable
 fun CartTotal(navController: NavController, cartViewModel: CartViewmodel) {
+    val totalItems by cartViewModel.totalItems.collectAsState()
 
     Column(
         modifier = Modifier
@@ -28,7 +31,7 @@ fun CartTotal(navController: NavController, cartViewModel: CartViewmodel) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = "Total amount: $${"%.2f".format(20.00)}",
+            text = "Total Amount: $totalItems",
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold
         )
@@ -37,7 +40,7 @@ fun CartTotal(navController: NavController, cartViewModel: CartViewmodel) {
 
         Button(
             onClick = {
-                navController.navigate("checkout/${0}")
+                navController.navigate("checkout/${totalItems}")
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
             modifier = Modifier.fillMaxWidth()

@@ -3,8 +3,8 @@ package com.example.ecommerce_app.data.source.dto
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "cart")
-data class CartEntity(
+@Entity(tableName = "favourite")
+data class FavouriteEntity(
     @PrimaryKey
     val id: Int,
     val title: String,
@@ -12,6 +12,5 @@ data class CartEntity(
     val description: String,
     val category: String,
     val image: String,
-    val quantity:Int,
 )
 

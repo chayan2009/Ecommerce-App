@@ -2,17 +2,22 @@ package com.example.ecommerce_app.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.ecommerce_app.core.common.Constants
 import com.example.ecommerce_app.core.database.AppDatabase
 import com.example.ecommerce_app.data.db.CartDao
+import com.example.ecommerce_app.data.db.FavouriteDao
 import com.example.ecommerce_app.data.db.ProductDao
 import com.example.ecommerce_app.data.repository.CartRepositoryImpl
+import com.example.ecommerce_app.data.repository.FavouritesRepositoryImpl
 import com.example.ecommerce_app.data.repository.MockUserRepositoryImpl
 import com.example.ecommerce_app.data.repository.ProductRepositoryImpl
 import com.example.ecommerce_app.data.source.api.ProductApi
 import com.example.ecommerce_app.domain.repository.CartRepository
+import com.example.ecommerce_app.domain.repository.FavouriteRepository
 import com.example.ecommerce_app.domain.repository.ProductRepository
 import com.example.ecommerce_app.domain.repository.UserRepository
 import com.example.ecommerce_app.domain.usecase.GetCartsUseCase
+import com.example.ecommerce_app.domain.usecase.GetFavouritesUseCase
 import com.example.ecommerce_app.domain.usecase.GetProductsUseCase
 import com.example.ecommerce_app.domain.usecase.LoginUserUseCase
 import com.example.ecommerce_app.domain.usecase.RegisterUserUseCase
@@ -32,7 +37,7 @@ object AppModule {
     @Provides
     @Singleton
     fun provideRetrofit(): Retrofit = Retrofit.Builder()
-        .baseUrl("https://fakestoreapi.com/")
+        .baseUrl(Constants.BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
@@ -55,6 +60,12 @@ object AppModule {
 
     @Provides
     @Singleton
+    fun provideFavouriteRepository(favouriteDao: FavouriteDao): FavouriteRepository {
+        return FavouritesRepositoryImpl(favouriteDao)
+    }
+
+    @Provides
+    @Singleton
     fun provideMockUserRepository(): UserRepository =
         MockUserRepositoryImpl()
 
@@ -67,6 +78,11 @@ object AppModule {
     @Singleton
     fun provideCartUseCase(repository: CartRepository): GetCartsUseCase =
         GetCartsUseCase(repository)
+
+    @Provides
+    @Singleton
+    fun provideFavouriteUseCase(repository: FavouriteRepository): GetFavouritesUseCase =
+        GetFavouritesUseCase(repository)
 
 
     @Provides
@@ -86,7 +102,7 @@ object AppModule {
         return Room.databaseBuilder(
             context.applicationContext,
             AppDatabase::class.java,
-            "ecommerce_dbxsx"
+            "ecommerced"
         ).build()
     }
     @Provides
@@ -97,6 +113,12 @@ object AppModule {
     @Singleton
     fun provideCartDao(database: AppDatabase): CartDao {
         return database.cartDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideFavouriteDao(database: AppDatabase): FavouriteDao {
+        return database.favouriteDao()
     }
 
 }

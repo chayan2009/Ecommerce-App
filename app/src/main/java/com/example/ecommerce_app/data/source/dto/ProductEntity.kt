@@ -11,6 +11,12 @@ data class ProductEntity(
     val description: String,
     val category: String,
     val image: String,
+    val rating: Rating
+
+    )
+data class Rating(
+    val count: Int,
+    val rate: Double
 )
 
 

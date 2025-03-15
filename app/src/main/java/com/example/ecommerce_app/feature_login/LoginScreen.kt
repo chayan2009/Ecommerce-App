@@ -34,8 +34,8 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = hi
     var loginAttempted by remember { mutableStateOf(true) }
     val currentLoginState by rememberUpdatedState(loginState)
 
-    LaunchedEffect(currentLoginState) {
-        if (currentLoginState == false) {
+    LaunchedEffect(loginState) {
+        if (loginState == true) {
             navController.navigate(Screen.MainScreen.route) {
                 popUpTo(Screen.MainScreen.route) { inclusive = true }
             }
@@ -44,7 +44,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = hi
 
     DisposableEffect(Unit) {
         onDispose {
-            viewModel.clearErrors()
+
         }
     }
 

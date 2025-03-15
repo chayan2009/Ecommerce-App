@@ -1,9 +1,7 @@
 package com.example.ecommerce_app.core.common
 
 import com.example.ecommerce_app.data.source.dto.CartEntity
-import com.example.ecommerce_app.data.source.dto.ProductEntity
 import com.example.ecommerce_app.domain.model.Cart
-import com.example.ecommerce_app.domain.model.Product
 
 object CartMapper {
 
@@ -14,7 +12,8 @@ object CartMapper {
             price = entity.price,
             category = entity.category,
             description = entity.description,
-            image = entity.image
+            image = entity.image,
+            quantity = entity.quantity,
         )
     }
 
@@ -25,7 +24,8 @@ object CartMapper {
             price = product.price,
             category = product.category,
             description = product.description,
-            image = product.image
+            image = product.image,
+            quantity = product.quantity
         )
     }
 

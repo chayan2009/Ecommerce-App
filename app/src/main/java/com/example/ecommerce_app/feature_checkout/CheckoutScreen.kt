@@ -18,7 +18,8 @@ import androidx.navigation.NavController
 import com.example.ecommerce_app.R
 
 @Composable
-fun CheckoutScreen(navController: NavController, toInt: Int) {
+fun CheckoutScreen(navController: NavController, toInt: Double) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -44,7 +45,7 @@ fun CheckoutScreen(navController: NavController, toInt: Int) {
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 12.dp),
+                .padding(vertical = 16.dp),
             shape = RoundedCornerShape(12.dp),
             elevation = 4.dp
         ) {
@@ -102,9 +103,9 @@ fun CheckoutScreen(navController: NavController, toInt: Int) {
 
         // Order Summary
         Column(modifier = Modifier.fillMaxWidth()) {
-            OrderSummaryRow("Order", "112$")
-            OrderSummaryRow("Delivery", "15$")
-            OrderSummaryRow("Summary", "127$", isBold = true)
+            OrderSummaryRow("Order:", toInt.toString())
+            OrderSummaryRow("Delivery:", "5$")
+            OrderSummaryRow("Summary:", toInt.toString(), isBold = true)
         }
 
         Spacer(modifier = Modifier.height(16.dp))

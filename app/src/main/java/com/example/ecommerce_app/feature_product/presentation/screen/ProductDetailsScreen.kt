@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.ecommerce_app.domain.model.Cart
 import com.example.ecommerce_app.feature_product.presentation.viewmodel.ProductViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -38,7 +39,7 @@ fun ProductDetailsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { product?.title?.let { Text(text = it) } },
+                title = { product?.title?.let { Text(text = it, fontSize = 16.sp) } },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
@@ -118,7 +119,20 @@ fun ProductDetailsScreen(
                             )
 
                             Button(
-                                onClick = {  },
+                                onClick = {
+                                    productViewModel.addToCart(
+                                        Cart(
+                                            product.id,
+                                            product.title,
+                                            product.price,
+                                            product.description,
+                                            product.category,
+                                            product.image,
+                                            1
+                                        )
+                                    )
+                                    navController.navigate("cart")
+                                },
                                 modifier = Modifier.fillMaxWidth().padding(bottom = 20.dp),
                                 shape = RoundedCornerShape(20.dp)
                             ) {

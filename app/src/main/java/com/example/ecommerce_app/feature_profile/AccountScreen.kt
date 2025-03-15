@@ -28,7 +28,7 @@ fun AccountScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        Appbar("My Profile")
+        Appbar("My Profile", navController = navController)
         ProfileHeader()
         Spacer(modifier = Modifier.height(8.dp))
         ProfileOptionsList(accountOptionViewModel.profileOptions)

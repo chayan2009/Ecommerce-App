@@ -12,7 +12,8 @@ object ProductMapper {
             price = entity.price,
             category = entity.category,
             description = entity.description,
-            image = entity.image
+            image = entity.image,
+            rating = entity.rating
         )
     }
 
@@ -23,7 +24,8 @@ object ProductMapper {
             price = product.price,
             category = product.category,
             description = product.description,
-            image = product.image
+            image = product.image,
+            rating = product.rating
         )
     }
 

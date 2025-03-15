@@ -95,15 +95,5 @@ fun AppNavigation(navController: NavHostController) {
             MainScreen()
         }
 
-//        composable(
-//            route = Screen.ProductDetailsScreen.route,
-//            enterTransition = { enterTransition },
-//            exitTransition = { exitTransition },
-//            popEnterTransition = { popEnterTransition },
-//            popExitTransition = { popExitTransition }
-//        ) {
-//            ProductDetailsScreen(navController, productId)
-//        }
-
     }
 }

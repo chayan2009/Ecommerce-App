@@ -64,7 +64,7 @@ fun SearchScreen(
                          }
                     }
                },
-               colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF6200EA))
+               colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.LightGray)
           )
 
           Spacer(modifier = Modifier.height(8.dp))

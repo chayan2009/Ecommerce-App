@@ -1,18 +1,25 @@
 package com.example.ecommerce_app.feature_cart
 
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.ecommerce_app.core.common.Appbar
-import com.example.ecommerce_app.feature_cart.presentation.CartItemList
+import com.example.ecommerce_app.core.common.EmptyMessage
+import com.example.ecommerce_app.feature_cart.presentation.CartItemRow
 import com.example.ecommerce_app.feature_cart.presentation.CartTotal
-import com.example.ecommerce_app.feature_cart.presentation.EmptyCartMessage
 import com.example.ecommerce_app.feature_cart.viewmodel.CartViewmodel
 
 @Composable
@@ -20,32 +27,40 @@ fun CartListScreen(
     navController: NavController,
     cartViewModel: CartViewmodel = hiltViewModel()
 ) {
-    val cartItems by cartViewModel.carts.collectAsState()
 
     Scaffold(
-        topBar = { Appbar("My Bag") }
+        topBar = { Appbar("My Bag", navController = navController) }
     ) { paddingValues ->
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues).verticalScroll(rememberScrollState()),
+                .padding(paddingValues),
         ) {
-            Column(
-                modifier = Modifier
-                    .weight(1f)
-                    .verticalScroll(rememberScrollState()),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
 
-                if (cartItems.isEmpty()) {
-                    EmptyCartMessage()
-                } else {
-                    CartItemList(cartItems, cartViewModel)
-                }
+            val cartItems by cartViewModel.carts.collectAsState()
+            val isLoading by cartViewModel.isLoading.collectAsState()
+
+            LaunchedEffect(Unit) {
+                cartViewModel.getCarts()
             }
 
-            CartTotal(navController, cartViewModel)
+            if (isLoading) {
+                CircularProgressIndicator(modifier = Modifier.fillMaxSize())
+            } else if (cartItems.isEmpty()) {
+                EmptyMessage(
+                    message = "No Carts are available!",
+                    fontSize = 18,
+                    fontWeight = FontWeight.Medium,
+                    color = Color.Red
+                )    } else {
+                LazyColumn {
+                    items(cartItems) { cartItem ->
+                        CartItemRow(cartItem, cartViewModel)
+                    }
+                }
+                CartTotal(navController,cartViewModel)
+            }
         }
     }
 }

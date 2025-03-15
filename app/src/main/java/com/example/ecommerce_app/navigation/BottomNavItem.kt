@@ -10,8 +10,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 sealed class BottomNavItem(val route: String, val icon: ImageVector, val title: String) {
     object Home : BottomNavItem("home", Icons.Filled.Home, "Home")
     object Search : BottomNavItem("search", Icons.Filled.Search, "Search")
-    object favourite : BottomNavItem("Favourite", Icons.Filled.FavoriteBorder, "Favourite")
+    object wishlist : BottomNavItem("wishlist", Icons.Filled.FavoriteBorder, "wishlist")
     object Cart : BottomNavItem("cart", Icons.Filled.ShoppingCart, "Cart")
     object Profile : BottomNavItem("profile", Icons.Filled.Person, "Profile")
-    object checkout : BottomNavItem("profile", Icons.Filled.Person, "Profile")
+    object checkout : BottomNavItem("checkout", Icons.Filled.Person, "checkout")
 }

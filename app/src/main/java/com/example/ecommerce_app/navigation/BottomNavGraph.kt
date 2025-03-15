@@ -10,6 +10,7 @@ import com.example.ecommerce_app.feature_checkout.CheckoutScreen
 import com.example.ecommerce_app.feature_product.presentation.screen.ProductDetailsScreen
 import com.example.ecommerce_app.feature_product.presentation.screen.ProductListScreen
 import com.example.ecommerce_app.feature_profile.AccountScreen
+import com.example.ecommerce_app.wishlist.presentation.FavouriteScreen
 
 @Composable
 fun BottomNavGraph(navController: NavHostController) {
@@ -17,15 +18,21 @@ fun BottomNavGraph(navController: NavHostController) {
         composable(BottomNavItem.Home.route) { ProductListScreen(navController, hiltViewModel()) }
         composable(BottomNavItem.Search.route) { SearchScreen(navController) }
         composable(BottomNavItem.Cart.route) { CartListScreen(navController) }
+        composable(BottomNavItem.wishlist.route) { FavouriteScreen(navController) }
         composable(BottomNavItem.Profile.route) { AccountScreen(navController) }
-        composable(BottomNavItem.Profile.route) { AccountScreen(navController) }
+
+        composable("wishlist/{id}") { backStackEntry ->
+            val productId = backStackEntry.arguments?.getString("id") ?: "Unknown"
+            FavouriteScreen(navController)
+        }
         composable("product_details/{id}") { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("id") ?: "Unknown"
             ProductDetailsScreen(navController, productId.toInt(), hiltViewModel())
         }
         composable("checkout/{id}") { backStackEntry ->
-            val productId = backStackEntry.arguments?.getString("id") ?: "Unknown"
-            CheckoutScreen(navController, productId.toInt())
+            val productId = backStackEntry.arguments?.getDouble("id") ?: 0.0
+            CheckoutScreen(navController, productId)
+
         }
     }
 }

@@ -12,14 +12,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.example.ecommerce_app.feature_cart.viewmodel.CartViewmodel
 
 @Composable
 fun Appbar(
     title: String,
-    bgColor: Color = Color(0xFF6200EA), // Updated color for better visibility
+    bgColor: Color = Color.LightGray,
     navigationIconType: NavigationIconType = NavigationIconType.NONE,
     onNavigationClick: (() -> Unit)? = null,
     showIcons: Boolean = true,
+    navController: NavController,
     actions: @Composable RowScope.() -> Unit = {}
 ) {
     var isSearchExpanded by remember { mutableStateOf(false) }
@@ -33,7 +36,7 @@ fun Appbar(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Navigation Icon (Back/Menu)
+
             Box(
                 modifier = Modifier.weight(1f),
                 contentAlignment = Alignment.CenterStart
@@ -89,7 +92,6 @@ fun Appbar(
                 }
             }
 
-            // Actions (Search & Cart Icons)
             Box(
                 modifier = Modifier.weight(1f),
                 contentAlignment = Alignment.CenterEnd
@@ -100,7 +102,9 @@ fun Appbar(
                             Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.White)
                         }
                         if (showIcons) {
-                            IconButton(onClick = { }) {
+                            IconButton(onClick = {
+                                navController.navigate("cart")
+                            }) {
                                 Icon(Icons.Default.ShoppingCart, contentDescription = "Cart", tint = Color.White)
                             }
                         }

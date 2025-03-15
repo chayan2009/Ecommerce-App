@@ -11,7 +11,7 @@ fun BottomNavigationBar(navController: NavController) {
     val items = listOf(
         BottomNavItem.Home,
         BottomNavItem.Search,
-        BottomNavItem.favourite,
+        BottomNavItem.wishlist,
         BottomNavItem.Cart,
         BottomNavItem.Profile
     )

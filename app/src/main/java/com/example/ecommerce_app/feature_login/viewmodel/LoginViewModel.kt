@@ -9,11 +9,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-
 @HiltViewModel
-class LoginViewModel @Inject constructor(
-    private val loginUserUseCase: LoginUserUseCase
-) : ViewModel() {
+class LoginViewModel @Inject constructor(private val loginUserUseCase: LoginUserUseCase) : ViewModel() {
 
     private val _username = MutableStateFlow("")
     val username: StateFlow<String> = _username
@@ -27,35 +24,28 @@ class LoginViewModel @Inject constructor(
     private val _passwordError = MutableStateFlow<String?>(null)
     val passwordError: StateFlow<String?> = _passwordError
 
-    private val _loginState = MutableStateFlow<Boolean?>(null)
+    private val _loginState = MutableStateFlow<Boolean?>(true)
     val loginState: StateFlow<Boolean?> = _loginState
 
-    fun onUsernameChange(newUsername: String) {
-        _username.value = newUsername
-        _usernameError.value = ValidationUtil.validateName(newUsername)
+    fun onUsernameChange(value: String) {
+        _username.value = value
+        _usernameError.value = ValidationUtil.validateName(value)
     }
 
-    fun onPasswordChange(newPassword: String) {
-        _password.value = newPassword
-        _passwordError.value = ValidationUtil.validatePassword(newPassword)
+    fun onPasswordChange(value: String) {
+        _password.value = value
+        _passwordError.value = ValidationUtil.validatePassword(value)
     }
 
     fun login() {
-
-        _usernameError.value = ValidationUtil.validateName(_username.value)
-        _passwordError.value = ValidationUtil.validatePassword(_password.value)
+        _usernameError.value = ValidationUtil.validateName(username.value)
+        _passwordError.value = ValidationUtil.validatePassword(password.value)
 
         if (_usernameError.value == null && _passwordError.value == null) {
             viewModelScope.launch {
-                val result = loginUserUseCase(User(_username.value, _password.value))
-                _loginState.value = result
+                _loginState.value = true
             }
         }
     }
-
-    fun clearErrors() {
-        _usernameError.value = null
-        _passwordError.value = null
-        _loginState.value = null
-    }
 }
+

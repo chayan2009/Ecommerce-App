@@ -1,16 +1,13 @@
 package com.example.ecommerce_app.feature_cart.viewmodel
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ecommerce_app.domain.model.Cart
-import com.example.ecommerce_app.domain.model.Product
 import com.example.ecommerce_app.domain.usecase.GetCartsUseCase
-import com.example.ecommerce_app.domain.usecase.GetProductsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -22,11 +19,15 @@ class CartViewmodel @Inject constructor(
 ) : ViewModel() {
 
     private val _carts = MutableStateFlow<List<Cart>>(emptyList())
-    val carts: StateFlow<List<Cart>> = _carts
+    val carts: StateFlow<List<Cart>> = _carts.asStateFlow()
 
     private val _isLoading = MutableStateFlow(true)
-    val isLoading: StateFlow<Boolean> = _isLoading
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
+    val totalItems: StateFlow<Any> = _carts.map { carts ->
+        carts.sumOf { it.price }
+
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
 
     init {
         getCarts()
@@ -35,19 +36,36 @@ class CartViewmodel @Inject constructor(
     fun getCarts() {
         viewModelScope.launch {
             getCartsUseCase.getCarts().collect { carts ->
-                Log.d("CartDebug", "Retrieved carts: $carts")
                 _carts.value = carts
+                _isLoading.value = false
             }
         }
     }
 
     fun addCartItem(cartItem: Cart) {
-
+        viewModelScope.launch {
+            val existingItem = _carts.value.find { it.id == cartItem.id }
+            if (existingItem != null) {
+                _carts.value = _carts.value.map {
+                    if (it.id == cartItem.id) it.copy(quantity = it.quantity + 1) else it
+                }
+            } else {
+                _carts.value += cartItem.copy(quantity = 1)
+            }
+        }
     }
 
     fun removeCartItem(id: Int) {
-
+        viewModelScope.launch {
+            _carts.value = _carts.value.mapNotNull {
+                when {
+                    it.id == id && it.quantity > 1 -> it.copy(quantity = it.quantity - 1)
+                    it.id == id -> null
+                    else -> it
+                }
+            }
+        }
     }
-
 }
+
 
