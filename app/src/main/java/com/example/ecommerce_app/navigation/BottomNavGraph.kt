@@ -10,10 +10,11 @@ import com.example.ecommerce_app.feature_checkout.CheckoutScreen
 import com.example.ecommerce_app.feature_product.presentation.screen.ProductDetailsScreen
 import com.example.ecommerce_app.feature_product.presentation.screen.ProductListScreen
 import com.example.ecommerce_app.feature_profile.AccountScreen
+
 @Composable
 fun BottomNavGraph(navController: NavHostController) {
     NavHost(navController = navController, startDestination = BottomNavItem.Home.route) {
-        composable(BottomNavItem.Home.route) { ProductListScreen(navController) }
+        composable(BottomNavItem.Home.route) { ProductListScreen(navController, hiltViewModel()) }
         composable(BottomNavItem.Search.route) { SearchScreen(navController) }
         composable(BottomNavItem.Cart.route) { CartListScreen(navController) }
         composable(BottomNavItem.Profile.route) { AccountScreen(navController) }
