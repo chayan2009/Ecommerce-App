@@ -22,8 +22,9 @@ object ValidationUtil {
 
     fun validatePassword(password: String): String? {
         return when {
-            password.isBlank() -> "Password cannot be empty"
-            password.length < 4 -> "Password must be at least 3 characters"
+            password.isBlank() -> "Name cannot be empty"
+            password.length < 3 -> "Name must be at least 3 characters"
+            !password.all { it.isLetter() || it.isWhitespace() } -> "Name can only contain letters and spaces"
             else -> null
         }
     }

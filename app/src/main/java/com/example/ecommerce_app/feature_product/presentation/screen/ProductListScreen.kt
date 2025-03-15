@@ -30,6 +30,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.ecommerce_app.R
 import com.example.ecommerce_app.core.common.Appbar
 import com.example.ecommerce_app.core.common.NavigationIconType
+import com.example.ecommerce_app.domain.model.Cart
 import com.example.ecommerce_app.domain.model.Product
 import com.example.ecommerce_app.feature_product.presentation.viewmodel.ProductViewModel
 import com.google.accompanist.pager.*
@@ -89,7 +90,12 @@ fun ProductListScreen(navController: NavController, viewModel: ProductViewModel 
                                 ProductCard(
                                     product,
                                     onProductClick = {
-                                            navController.navigate("product_details/${product.id}")
+                                        navController.navigate("product_details/${product.id}")
+                                    },
+                                    onCartClick = {
+                                        val cart= Cart(product.id,product.title,product.price,product.description,product.category,product.image)
+                                        viewModel.addToCart(cart)
+                                        navController.navigate("cart")
                                     }
                                 )
                             }
@@ -262,7 +268,7 @@ fun RecommendedProductCard(product: Product) {
 
 // Product Card for Grid Layout
 @Composable
-fun ProductCard(product: Product,onProductClick:()->Unit) {
+fun ProductCard(product: Product,onProductClick:()->Unit,onCartClick:()->Unit) {
     androidx.compose.material3.Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -284,7 +290,7 @@ fun ProductCard(product: Product,onProductClick:()->Unit) {
             Text(text = product.title, style = MaterialTheme.typography.body1)
             Text(text = "$${product.price}", style = MaterialTheme.typography.subtitle1)
             Button(
-                onClick = { onProductClick() },
+                onClick = { onCartClick() },
                 modifier = Modifier.padding(top = 4.dp)
             ) {
                 Text("Add to Cart")

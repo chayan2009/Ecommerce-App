@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.ecommerce_app.feature_cart.CartListScreen
+import com.example.ecommerce_app.feature_checkout.CheckoutScreen
 import com.example.ecommerce_app.feature_product.presentation.screen.ProductDetailsScreen
 import com.example.ecommerce_app.feature_product.presentation.screen.ProductListScreen
 import com.example.ecommerce_app.feature_profile.AccountScreen
@@ -20,6 +21,10 @@ fun BottomNavGraph(navController: NavHostController) {
         composable("product_details/{id}") { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("id") ?: "Unknown"
             ProductDetailsScreen(navController, productId.toInt(), hiltViewModel())
+        }
+        composable("checkout/{id}") { backStackEntry ->
+            val productId = backStackEntry.arguments?.getString("id") ?: "Unknown"
+            CheckoutScreen(navController, productId.toInt())
         }
     }
 }

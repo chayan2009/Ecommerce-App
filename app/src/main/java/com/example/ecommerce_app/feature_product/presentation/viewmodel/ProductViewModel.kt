@@ -3,7 +3,9 @@ package com.example.ecommerce_app.feature_product.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.ecommerce_app.domain.model.Cart
 import com.example.ecommerce_app.domain.model.Product
+import com.example.ecommerce_app.domain.usecase.GetCartsUseCase
 import com.example.ecommerce_app.domain.usecase.GetProductsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
@@ -14,7 +16,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProductViewModel @Inject constructor(
-    private val getProductsUseCase: GetProductsUseCase
+    private val getProductsUseCase: GetProductsUseCase,
+    private val getCartsUseCase: GetCartsUseCase
 ) : ViewModel() {
 
     private val _categories = MutableStateFlow<List<String>>(emptyList())
@@ -65,5 +68,11 @@ class ProductViewModel @Inject constructor(
 
     fun onCategorySelected(category: String) {
         _selectedCategory.value = category
+    }
+
+    fun addToCart(cart: Cart) {
+        viewModelScope.launch {
+            getCartsUseCase.addCartItem(cart)
+        }
     }
 }

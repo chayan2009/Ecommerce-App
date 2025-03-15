@@ -5,21 +5,28 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.ecommerce_app.feature_cart.model.CartItem
+import androidx.room.Update
+import com.example.ecommerce_app.data.source.dto.CartEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CartDao {
 
+    @Query("SELECT * FROM cart")
+    fun getCarts(): Flow<List<CartEntity>>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addToCart(cartItem: CartItem)
+    suspend fun insertCartItem(cartItem: CartEntity)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertCartItems(cartItems: List<CartEntity>)
 
     @Delete
-    suspend fun removeFromCart(cartItem: CartItem)
+    suspend fun deleteCartItem(cartItem: CartEntity)
 
-    @Query("SELECT * FROM cart_table")
-    fun getCartItems(): Flow<List<CartItem>>
+    @Query("DELETE FROM cart WHERE id = :cartItemId")
+    suspend fun deleteCartItemById(cartItemId: Int)
 
-    @Query("DELETE FROM cart_table")
+    @Query("DELETE FROM cart")
     suspend fun clearCart()
 }

@@ -7,11 +7,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.ecommerce_app.domain.model.Product
+import com.example.ecommerce_app.domain.model.Cart
 import com.example.ecommerce_app.feature_cart.viewmodel.CartViewmodel
 
 @Composable
-fun CartItemList(cartItems: List<Product>, cartViewModel: CartViewmodel) {
+fun CartItemList(cartItems: List<Cart>, cartViewModel: CartViewmodel) {
     Column(
         modifier = Modifier
             .fillMaxWidth()

@@ -7,11 +7,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.ecommerce_app.core.common.Appbar
 import com.example.ecommerce_app.feature_cart.presentation.CartItemList
+import com.example.ecommerce_app.feature_cart.presentation.CartTotal
 import com.example.ecommerce_app.feature_cart.presentation.EmptyCartMessage
 import com.example.ecommerce_app.feature_cart.viewmodel.CartViewmodel
 
@@ -20,26 +20,33 @@ fun CartListScreen(
     navController: NavController,
     cartViewModel: CartViewmodel = hiltViewModel()
 ) {
-    val cartItems by cartViewModel.products.collectAsState()
-    //val totalPrice = cartViewModel.getTotalPrice()
+    val cartItems by cartViewModel.carts.collectAsState()
 
     Scaffold(
-        topBar = { Appbar("Cart") }
+        topBar = { Appbar("My Bag") }
     ) { paddingValues ->
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .verticalScroll(rememberScrollState()),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(paddingValues).verticalScroll(rememberScrollState()),
         ) {
-            if (cartItems.isEmpty()) {
-                EmptyCartMessage()
-            } else {
-                CartItemList(cartItems, cartViewModel)
-                //CartTotal(totalPrice) {  }
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .verticalScroll(rememberScrollState()),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                if (cartItems.isEmpty()) {
+                    EmptyCartMessage()
+                } else {
+                    CartItemList(cartItems, cartViewModel)
+                }
             }
+
+            CartTotal(navController, cartViewModel)
         }
     }
 }
+

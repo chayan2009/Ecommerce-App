@@ -31,11 +31,11 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = hi
     val passwordError by viewModel.passwordError.collectAsState()
     val loginState by viewModel.loginState.collectAsState()
 
-    var loginAttempted by remember { mutableStateOf(false) }
+    var loginAttempted by remember { mutableStateOf(true) }
     val currentLoginState by rememberUpdatedState(loginState)
 
     LaunchedEffect(currentLoginState) {
-        if (currentLoginState == true) {
+        if (currentLoginState == false) {
             navController.navigate(Screen.MainScreen.route) {
                 popUpTo(Screen.MainScreen.route) { inclusive = true }
             }
@@ -111,7 +111,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = hi
 
             Button(
                 onClick = {
-                    loginAttempted = true
+                   // loginAttempted = true
                     viewModel.login()
                 },
                 shape = RoundedCornerShape(24.dp),
@@ -136,7 +136,6 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = hi
             }
         }
 
-        // ✅ Show login failure message only when needed
         if (loginAttempted && loginState == false) {
             Text(
                 text = "Login Failed!",

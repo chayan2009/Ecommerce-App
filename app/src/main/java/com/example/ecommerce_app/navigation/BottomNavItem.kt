@@ -13,4 +13,5 @@ sealed class BottomNavItem(val route: String, val icon: ImageVector, val title: 
     object favourite : BottomNavItem("Favourite", Icons.Filled.FavoriteBorder, "Favourite")
     object Cart : BottomNavItem("cart", Icons.Filled.ShoppingCart, "Cart")
     object Profile : BottomNavItem("profile", Icons.Filled.Person, "Profile")
+    object checkout : BottomNavItem("profile", Icons.Filled.Person, "Profile")
 }

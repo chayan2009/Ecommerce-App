@@ -1,49 +1,52 @@
 package com.example.ecommerce_app.feature_cart.viewmodel
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.ecommerce_app.domain.model.Cart
 import com.example.ecommerce_app.domain.model.Product
+import com.example.ecommerce_app.domain.usecase.GetCartsUseCase
 import com.example.ecommerce_app.domain.usecase.GetProductsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CartViewmodel @Inject constructor(
-    private val getProductsUseCase: GetProductsUseCase
+    private val getCartsUseCase: GetCartsUseCase
 ) : ViewModel() {
 
-    private val _products = MutableStateFlow<List<Product>>(emptyList())
-    val products: StateFlow<List<Product>> = _products
+    private val _carts = MutableStateFlow<List<Cart>>(emptyList())
+    val carts: StateFlow<List<Cart>> = _carts
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading
 
 
     init {
-        fetchData()
+        getCarts()
     }
 
-    private fun fetchData() {
+    fun getCarts() {
         viewModelScope.launch {
-            _isLoading.value = true
-            try {
-                val productsDeferred = async { fetchProducts() }
-                productsDeferred.await()
-            } catch (e: Exception) {
-                e.printStackTrace()
-            } finally {
-                _isLoading.value = false
+            getCartsUseCase.getCarts().collect { carts ->
+                Log.d("CartDebug", "Retrieved carts: $carts")
+                _carts.value = carts
             }
         }
     }
 
-    private suspend fun fetchProducts() {
-        getProductsUseCase().collect { productList ->
-            _products.value = productList
-        }
+    fun addCartItem(cartItem: Cart) {
+
+    }
+
+    fun removeCartItem(id: Int) {
+
     }
 
 }

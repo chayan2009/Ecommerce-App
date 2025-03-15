@@ -1,9 +1,11 @@
 package com.example.ecommerce_app.domain.model
 
-data class CartItem(
+data class Cart(
     val id: Int,
     val title: String,
     val price: Double,
-    val image: String
+    val description: String,
+    val category: String,
+    val image: String,
 )
 
