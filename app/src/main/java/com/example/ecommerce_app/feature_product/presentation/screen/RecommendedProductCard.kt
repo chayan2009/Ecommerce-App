@@ -37,6 +37,7 @@ fun RecommendedProductCard(product: Product) {
             .height(260.dp)
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
+
             Image(
                 painter = rememberAsyncImagePainter(product.image),
                 contentDescription = product.title,

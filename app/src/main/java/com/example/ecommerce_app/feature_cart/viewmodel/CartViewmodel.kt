@@ -42,28 +42,33 @@ class CartViewmodel @Inject constructor(
         }
     }
 
-    fun addCartItem(cartItem: Cart) {
+    fun addCartItem(cart: Cart) {
         viewModelScope.launch {
-            val existingItem = _carts.value.find { it.id == cartItem.id }
-            if (existingItem != null) {
-                _carts.value = _carts.value.map {
-                    if (it.id == cartItem.id) it.copy(quantity = it.quantity + 1) else it
-                }
+            val currentList = _carts.value.toMutableList()
+            val index = currentList.indexOfFirst { it.id == cart.id }
+            if (index != -1) {
+                val updatedItem = currentList[index].copy(quantity = currentList[index].quantity + 1)
+                currentList[index] = updatedItem
             } else {
-                _carts.value += cartItem.copy(quantity = 1)
+                currentList.add(cart.copy(quantity = 1))
             }
+            _carts.value = currentList
         }
     }
 
     fun removeCartItem(id: Int) {
         viewModelScope.launch {
-            _carts.value = _carts.value.mapNotNull {
-                when {
-                    it.id == id && it.quantity > 1 -> it.copy(quantity = it.quantity - 1)
-                    it.id == id -> null
-                    else -> it
+            val currentList = _carts.value.toMutableList()
+            val index = currentList.indexOfFirst { it.id == id }
+            if (index != -1) {
+                val currentItem = currentList[index]
+                if (currentItem.quantity > 1) {
+                    currentList[index] = currentItem.copy(quantity = currentItem.quantity - 1)
+                } else {
+                    currentList.removeAt(index)
                 }
             }
+            _carts.value = currentList
         }
     }
 }

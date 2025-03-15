@@ -20,17 +20,19 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.example.ecommerce_app.domain.model.Cart
 import com.example.ecommerce_app.feature_cart.viewmodel.CartViewmodel
+
 @Composable
 fun CartItemRow(cartItem: Cart, cartViewModel: CartViewmodel = hiltViewModel()) {
 
         Card(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),
+                .padding(16.dp),
             shape = RoundedCornerShape(12.dp),
             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White)
         ) {
+
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

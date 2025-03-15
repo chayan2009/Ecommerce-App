@@ -58,7 +58,7 @@ fun FavouriteItemRow (
                 Image(
                     painter = rememberAsyncImagePainter(product.image),
                     contentDescription = product.title,
-                    contentScale = ContentScale.Crop,
+                    contentScale = ContentScale.Fit,
                     modifier = Modifier.fillMaxSize()
                 )
 
