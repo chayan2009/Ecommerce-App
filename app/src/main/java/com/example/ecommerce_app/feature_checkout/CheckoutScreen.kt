@@ -26,7 +26,7 @@ import com.example.ecommerce_app.R
 import com.example.ecommerce_app.core.common.Appbar
 
 @Composable
-fun CheckoutScreen(navController: NavController, toInt: Double) {
+fun CheckoutScreen(navController: NavController, price: Double, count: Int) {
     Scaffold(
         topBar = { Appbar("Check Out", navController = navController) }
     ) { paddingValues ->
@@ -77,13 +77,15 @@ fun CheckoutScreen(navController: NavController, toInt: Double) {
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             ) {
-                OrderSummaryRow("Order:", toInt.toString())
+                OrderSummaryRow("Order:", count.toString())
                 OrderSummaryRow("Delivery:", "5$")
-                OrderSummaryRow("Summary:", toInt.toString(), isBold = true)
+                OrderSummaryRow("Summary:", price.toString(), isBold = true)
             }
 
             Button(
-                onClick = { /* Handle submit order */ },
+                onClick = {
+                    
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(50.dp)

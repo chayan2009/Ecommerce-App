@@ -23,6 +23,7 @@ import com.example.ecommerce_app.feature_cart.viewmodel.CartViewmodel
 @Composable
 fun CartTotal(navController: NavController, cartViewModel: CartViewmodel) {
     val totalItems by cartViewModel.totalItems.collectAsState()
+    val totalCounts by cartViewModel.totalCount.collectAsState()
 
     Column(
         modifier = Modifier
@@ -40,7 +41,10 @@ fun CartTotal(navController: NavController, cartViewModel: CartViewmodel) {
 
         Button(
             onClick = {
-                navController.navigate("checkout/${totalItems}")
+
+                val price = totalItems ?: 0.0
+                val count = totalCounts ?: 0
+                navController.navigate("checkout/$price/$count")
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Red),
             modifier = Modifier.fillMaxWidth()

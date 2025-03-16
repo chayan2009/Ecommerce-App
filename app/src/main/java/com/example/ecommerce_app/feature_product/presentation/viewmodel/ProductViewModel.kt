@@ -1,6 +1,5 @@
 package com.example.ecommerce_app.feature_product.presentation.viewmodel
 
-
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ecommerce_app.domain.model.Cart
@@ -10,10 +9,9 @@ import com.example.ecommerce_app.domain.usecase.GetCartsUseCase
 import com.example.ecommerce_app.domain.usecase.GetFavouritesUseCase
 import com.example.ecommerce_app.domain.usecase.GetProductsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.async
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,9 +36,8 @@ class ProductViewModel @Inject constructor(
     init {
         fetchData()
     }
-
     private fun fetchData() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             _isLoading.value = true
             try {
                 val productsDeferred = async { fetchProducts() }
@@ -57,15 +54,23 @@ class ProductViewModel @Inject constructor(
     }
 
     private suspend fun fetchProducts() {
-        getProductsUseCase().collect { productList ->
-            _products.value = productList
+        try {
+            getProductsUseCase().collect { productList ->
+                _products.value = productList
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
     private suspend fun fetchCategories() {
-        getProductsUseCase().collect { productList ->
-            val categoryList = productList.map { it.category }.distinct()
-            _categories.value = categoryList
+        try {
+            getProductsUseCase().collect { productList ->
+                val categoryList = productList.map { it.category }.distinct()
+                _categories.value = categoryList
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
     }
 
@@ -75,13 +80,15 @@ class ProductViewModel @Inject constructor(
 
     fun addToCart(cart: Cart) {
         viewModelScope.launch {
-            getCartsUseCase.addCartItem(cart)
+            runCatching { getCartsUseCase.addCartItem(cart) }
+                .onFailure { it.printStackTrace() }
         }
     }
 
-     fun addToFavourite(favourite: Favourite) {
+    fun addToFavourite(favourite: Favourite) {
         viewModelScope.launch {
-            getFavouritesUseCase.addFavItem(favourite)
+            runCatching { getFavouritesUseCase.addFavItem(favourite) }
+                .onFailure { it.printStackTrace() }
         }
     }
 }

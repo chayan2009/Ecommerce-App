@@ -29,11 +29,12 @@ fun BottomNavGraph(navController: NavHostController) {
             val productId = backStackEntry.arguments?.getString("id") ?: "Unknown"
             ProductDetailsScreen(navController, productId.toInt(), hiltViewModel())
         }
-        composable("checkout/{id}") { backStackEntry ->
-            val productId = backStackEntry.arguments?.getDouble("id") ?: 0.0
-            CheckoutScreen(navController, productId)
-
+        composable("checkout/{price}/{count}") { backStackEntry ->
+            val price = backStackEntry.arguments?.getString("price")?.toDoubleOrNull() ?: 0.0
+            val count = backStackEntry.arguments?.getString("count")?.toIntOrNull() ?: 0
+            CheckoutScreen(navController, price, count)
         }
+
     }
 }
 

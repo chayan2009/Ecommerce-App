@@ -1,8 +1,6 @@
 package com.example.ecommerce_app.core.common
 
-import com.example.ecommerce_app.data.source.dto.CartEntity
 import com.example.ecommerce_app.data.source.dto.FavouriteEntity
-import com.example.ecommerce_app.domain.model.Cart
 import com.example.ecommerce_app.domain.model.Favourite
 
 object FavouriteMapper {
