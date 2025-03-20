@@ -81,7 +81,7 @@ fun ProductCard(
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp,
                                 color = Color.White,
-                                maxLines = 2
+                                maxLines = 1
                             )
                             Text(
                                 text = product.category.uppercase(),

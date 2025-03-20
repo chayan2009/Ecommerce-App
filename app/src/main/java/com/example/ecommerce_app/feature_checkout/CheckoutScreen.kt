@@ -114,6 +114,9 @@ fun CheckoutScreen(navController: NavController, price: Double, count: Int) {
                 quantity = count,
                 onPaymentConfirmed = {
                     showBottomSheet = false
+                    navController.navigate("success") {
+                        popUpTo("checkout") { inclusive = true }
+                    }
                 }
             )
         }

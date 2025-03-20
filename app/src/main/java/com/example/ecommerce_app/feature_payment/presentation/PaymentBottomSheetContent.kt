@@ -66,7 +66,7 @@ fun PaymentBottomSheetContent(
 
         Customizedbutton(
             text = "Pay Now".lowercase(),
-            onClick = { onPaymentConfirmed}
+            onClick = { onPaymentConfirmed()}
         )
     }
 

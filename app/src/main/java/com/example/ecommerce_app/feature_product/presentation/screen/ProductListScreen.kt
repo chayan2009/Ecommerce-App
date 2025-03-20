@@ -1,22 +1,11 @@
 package com.example.ecommerce_app.feature_product.presentation.screen
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -56,12 +45,13 @@ fun ProductListScreen(navController: NavController, viewModel: ProductViewModel 
                 ) {
                     item {
                         CategoryFilter(categories, selectedCategory) { selectedCategory = it }
+                        Divider(modifier = Modifier.padding(vertical = 2.dp))
                     }
                     item {
                         BannerSection(filteredProducts.map { it.image })
                     }
                     item {
-                        RecommendedProductsSection(filteredProducts,navController,viewModel)
+                        RecommendedProductsSection(filteredProducts, navController, viewModel)
                     }
                     item {
                         Text(
@@ -74,7 +64,7 @@ fun ProductListScreen(navController: NavController, viewModel: ProductViewModel 
                     items(filteredProducts) { product ->
                         ProductCard(
                             product = product,
-                            onProductClick = { navController.navigate("product_details/${product.id}") },
+                            onProductClick = { navController.navigate("product_details/${'$'}{product.id}") },
                             onCartClick = {
                                 viewModel.addToCart(
                                     Cart(
@@ -100,18 +90,12 @@ fun ProductListScreen(navController: NavController, viewModel: ProductViewModel 
                                         product.image
                                     )
                                 )
-                                navController.navigate("wishlist/${product.id}")
+                                navController.navigate("wishlist/${'$'}{product.id}")
                             },
-
-                            )
+                        )
                     }
                 }
             }
         }
     }
 }
-
-
-
-
-

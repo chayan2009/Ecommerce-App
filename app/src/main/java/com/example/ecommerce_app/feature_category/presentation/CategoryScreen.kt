@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -78,7 +79,8 @@ fun CategoryScreen(
                         selectedTabIndex = categoryList.indexOf(selectedCategory).takeIf { it >= 0 } ?: 0,
                         backgroundColor = Color.Transparent,
                         edgePadding = 8.dp,
-                        divider = {}
+                        divider = {},
+                        modifier = Modifier.height(55.dp)
                     ) {
                         categoryList.forEachIndexed { index, category ->
                             Tab(
