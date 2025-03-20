@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 fun DeliveryOptionCard(imageRes: Int, name: String, duration: String) {
     Card(
         modifier = Modifier
-            .size(200.dp).padding(16.dp)
+            .size(200.dp)
             .clickable {  },
         shape = RoundedCornerShape(12.dp),
         elevation = 4.dp

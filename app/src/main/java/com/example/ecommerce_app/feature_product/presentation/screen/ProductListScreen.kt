@@ -61,7 +61,7 @@ fun ProductListScreen(navController: NavController, viewModel: ProductViewModel 
                         BannerSection(filteredProducts.map { it.image })
                     }
                     item {
-                        RecommendedProductsSection(filteredProducts)
+                        RecommendedProductsSection(filteredProducts,navController,viewModel)
                     }
                     item {
                         Text(

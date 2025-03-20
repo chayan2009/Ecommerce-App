@@ -17,6 +17,10 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "dagger.hilt.android.testing.HiltAndroidTestRunner"
+//        buildConfigField("String", "STRIPE_PUBLISHABLE_KEY", "\"${project.findProperty("stripe.publishable.key")}\"")
+//        buildConfigField("String", "STRIPE_SECRET_KEY", "\"${project.findProperty("stripe.secret.key")}\"")
+        buildConfigField("String", "STRIPE_PUBLISHABLE_KEY", "\"${project.findProperty("STRIPE_PUBLISHABLE_KEY")}\"")
+
     }
 
     buildTypes {
@@ -37,6 +41,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     kapt {
         correctErrorTypes = true
@@ -68,6 +73,7 @@ dependencies {
     implementation("androidx.room:room-runtime:2.6.1")
     implementation("androidx.room:room-ktx:2.6.1")
     implementation(libs.navigation.testing)
+    implementation(libs.mockk.android)
     kapt("androidx.room:room-compiler:2.6.1")
 
     // Dependency Injection (Hilt)
@@ -116,7 +122,8 @@ dependencies {
     androidTestImplementation("io.mockk:mockk-android:1.13.7")
     androidTestImplementation("androidx.test:runner:1.5.2")
 
-
+   //work manager
+    implementation("androidx.work:work-runtime-ktx:2.9.0")
 
     // ✅ Hilt Core
     implementation("com.google.dagger:hilt-android:2.48")
@@ -125,6 +132,7 @@ dependencies {
     // ✅ Hilt for Instrumentation Tests
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.48")
     kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.48")
+    implementation("com.google.accompanist:accompanist-systemuicontroller:0.31.1-alpha")
 
     // Hilt Testing
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.48")
@@ -143,4 +151,7 @@ dependencies {
     // Debugging Tools
     debugImplementation("androidx.compose.ui:ui-tooling:1.6.3")
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.3")
+
+//    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.2")
+    implementation("com.stripe:stripe-android:20.39.0") // Latest Stripe SDK
 }

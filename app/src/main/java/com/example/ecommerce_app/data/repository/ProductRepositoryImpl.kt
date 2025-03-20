@@ -13,27 +13,33 @@ import kotlinx.coroutines.flow.flow
 class ProductRepositoryImpl(
     private val api: ProductApi,
     private val productDao: ProductDao
-) :ProductRepository{
+) : ProductRepository {
 
     override suspend fun getProducts(): Flow<List<Product>> = flow {
         val cachedProducts = productDao.getProducts()
             .firstOrNull()
             ?.let { ProductMapper.entityListToDomainList(it) } ?: emptyList()
 
-        emit(cachedProducts)
+        println("Cached Products size: ${cachedProducts.size}")
 
-        try {
-            val response = api.getProducts()
-            val domainProducts = response
-            productDao.insertProducts(ProductMapper.domainListToEntityList(domainProducts))
-            emit(domainProducts)
-        } catch (e: Exception) {
-            val fallbackProducts = productDao.getProducts()
-                .firstOrNull()
-                ?.let { ProductMapper.entityListToDomainList(it) } ?: emptyList()
+        if (cachedProducts.isNotEmpty()) {
+            emit(cachedProducts)
+        } else {
+            try {
+                val response = api.getProducts()
+                println("API Response size: ${response.size}")
 
-            emit(fallbackProducts)
+                val domainProducts = response
+                val entityList = ProductMapper.domainListToEntityList(domainProducts)
+
+                productDao.insertProducts(entityList)
+                emit(domainProducts)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emit(emptyList())
+            }
         }
     }
 }
+
 

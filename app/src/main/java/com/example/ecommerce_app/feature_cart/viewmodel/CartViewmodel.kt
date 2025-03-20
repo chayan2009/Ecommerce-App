@@ -32,7 +32,6 @@ class CartViewmodel @Inject constructor(
         carts.sumOf { it.quantity }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
 
-
     init {
         getCarts()
     }

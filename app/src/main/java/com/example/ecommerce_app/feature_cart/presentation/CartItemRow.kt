@@ -24,86 +24,86 @@ import com.example.ecommerce_app.feature_cart.viewmodel.CartViewmodel
 @Composable
 fun CartItemRow(cartItem: Cart, cartViewModel: CartViewmodel = hiltViewModel()) {
 
-        Card(
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White)
+    ) {
+
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            shape = RoundedCornerShape(12.dp),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White)
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
-
-            Row(
+            Image(
+                painter = rememberAsyncImagePainter(model = cartItem.image),
+                contentDescription = cartItem.title,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(12.dp),
-                verticalAlignment = Alignment.CenterVertically
+                    .size(80.dp)
+                    .background(Color.LightGray, shape = RoundedCornerShape(8.dp))
+            )
+
+            Spacer(modifier = Modifier.width(12.dp))
+
+            Column(
+                modifier = Modifier.weight(1f)
             ) {
-                Image(
-                    painter = rememberAsyncImagePainter(model = cartItem.image),
-                    contentDescription = cartItem.title,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .size(80.dp)
-                        .background(Color.LightGray, shape = RoundedCornerShape(8.dp))
+                Text(
+                    text = cartItem.title,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    color = Color.Black
+                )
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(
+                    text = "Price: $${cartItem.price}",
+                    fontSize = 12.sp,
+                    color = Color(0xFF388E3C),
+                    fontWeight = FontWeight.SemiBold
                 )
 
-                Spacer(modifier = Modifier.width(12.dp))
-
-                Column(
-                    modifier = Modifier.weight(1f)
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
                 ) {
-                    Text(
-                        text = cartItem.title,
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        maxLines = 1,
-                        color = Color.Black
-                    )
-                    Spacer(modifier = Modifier.height(4.dp))
-                    Text(
-                        text = "Price: $${cartItem.price}",
-                        fontSize = 12.sp,
-                        color = Color(0xFF388E3C),
-                        fontWeight = FontWeight.SemiBold
-                    )
-
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.End
+                    IconButton(
+                        onClick = { cartViewModel.addCartItem(cartItem) },
+                        modifier = Modifier.size(28.dp)
                     ) {
-                        IconButton(
-                            onClick = { cartViewModel.addCartItem(cartItem) },
-                            modifier = Modifier.size(28.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Add,
-                                contentDescription = "Increase",
-                                tint = Color.Blue
-                            )
-                        }
-
-                        Text(
-                            text = cartItem.quantity.toString(),
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier
-                                .padding(horizontal = 8.dp)
-                                .align(Alignment.CenterVertically)
+                        Icon(
+                            imageVector = Icons.Default.Add,
+                            contentDescription = "Increase",
+                            tint = Color.Blue
                         )
+                    }
 
-                        IconButton(
-                            onClick = { cartViewModel.removeCartItem(cartItem.id) },
-                            modifier = Modifier.size(28.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Delete,
-                                contentDescription = "Remove",
-                                tint = Color.Red
-                            )
-                        }
+                    Text(
+                        text = cartItem.quantity.toString(),
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Bold,
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                            .align(Alignment.CenterVertically)
+                    )
+
+                    IconButton(
+                        onClick = { cartViewModel.removeCartItem(cartItem.id) },
+                        modifier = Modifier.size(28.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Remove",
+                            tint = Color.Red
+                        )
                     }
                 }
             }
         }
+    }
 }

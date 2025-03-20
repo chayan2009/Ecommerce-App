@@ -1,4 +1,4 @@
-package com.example.ecommerce_app.feature_product.presentation.viewmodel
+package com.example.ecommerce_app.feature_category.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,13 +9,15 @@ import com.example.ecommerce_app.domain.usecase.GetCartsUseCase
 import com.example.ecommerce_app.domain.usecase.GetFavouritesUseCase
 import com.example.ecommerce_app.domain.usecase.GetProductsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class ProductViewModel @Inject constructor(
+class CategoryScreenViewModel @Inject constructor(
     private val getProductsUseCase: GetProductsUseCase,
     private val getCartsUseCase: GetCartsUseCase,
     private val getFavouritesUseCase: GetFavouritesUseCase

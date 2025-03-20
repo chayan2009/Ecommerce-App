@@ -13,12 +13,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.ecommerce_app.feature_cart.viewmodel.CartViewmodel
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 @Composable
 fun Appbar(
     title: String,
-    bgColor: Color = Color.LightGray,
+    bgColor: Color = Color(0xFF6200EA),
     navigationIconType: NavigationIconType = NavigationIconType.NONE,
     onNavigationClick: (() -> Unit)? = null,
     showIcons: Boolean = true,
@@ -27,6 +27,13 @@ fun Appbar(
 ) {
     var isSearchExpanded by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf("") }
+
+    val systemUiController = rememberSystemUiController()
+
+    SideEffect {
+        systemUiController.setStatusBarColor(color = bgColor)
+    }
+
 
     TopAppBar(
         backgroundColor = bgColor,
@@ -64,7 +71,6 @@ fun Appbar(
                 }
             }
 
-            // Title or Search Field
             Box(
                 modifier = Modifier.weight(2f),
                 contentAlignment = Alignment.Center

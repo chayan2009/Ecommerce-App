@@ -12,10 +12,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.ecommerce_app.domain.model.Product
+import com.example.ecommerce_app.feature_product.presentation.viewmodel.ProductViewModel
 
 @Composable
-fun RecommendedProductsSection(products: List<Product>) {
+fun RecommendedProductsSection(
+    products: List<Product>,
+    navController: NavController,
+    viewModel: ProductViewModel
+) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Text(
             "Recommended for You",
@@ -24,7 +30,7 @@ fun RecommendedProductsSection(products: List<Product>) {
             modifier = Modifier.padding(16.dp)
         )
         LazyRow(contentPadding = PaddingValues(16.dp)) {
-            items(products.take(5)) { product -> RecommendedProductCard(product) }
+            items(products) { product -> RecommendedProductCard(product) }
         }
     }
 }

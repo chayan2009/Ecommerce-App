@@ -25,7 +25,6 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.ecommerce_app.core.common.RatingBar
 import com.example.ecommerce_app.domain.model.Product
 
-
 @Composable
 fun RecommendedProductCard(product: Product) {
     Card(
@@ -33,50 +32,52 @@ fun RecommendedProductCard(product: Product) {
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = Modifier
             .padding(8.dp)
-            .width(200.dp)
-            .height(260.dp)
+            .width(160.dp)
+            .height(240.dp)
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
 
             Image(
                 painter = rememberAsyncImagePainter(product.image),
                 contentDescription = product.title,
-                contentScale = ContentScale.Fit,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize()
             )
+
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .background(Color.Black.copy(alpha = 0.6f))
                     .align(Alignment.BottomCenter)
+                    .padding(8.dp)
             ) {
-                Column(
-                    modifier = Modifier.padding(top = 8.dp).padding(10.dp)
-                ) {
+
+                Column {
                     Text(
                         text = product.title,
                         fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
+                        fontSize = 14.sp,
+                        color = Color.White,
                         maxLines = 1
                     )
 
                     RatingBar(
                         rating = product.rating.rate,
-                        modifier = Modifier.padding(top = 4.dp)
+                        modifier = Modifier.padding(top = 2.dp)
                     )
 
                     Text(
                         text = "(${product.rating.count})",
-                        fontSize = 14.sp,
-                        color = Color.Gray
+                        fontSize = 12.sp,
+                        color = Color.LightGray
                     )
 
                     Text(
-                        text = product.category,
-                        fontWeight = FontWeight.Medium,
+                        text = "$${product.price}",
+                        fontWeight = FontWeight.Bold,
                         fontSize = 14.sp,
-                        maxLines = 1,
-                        color = Color.Gray
+                        color = Color.White,
+                        modifier = Modifier.padding(top = 4.dp)
                     )
                 }
             }

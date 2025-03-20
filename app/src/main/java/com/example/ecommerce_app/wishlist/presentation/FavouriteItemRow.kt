@@ -32,39 +32,81 @@ import coil.compose.rememberAsyncImagePainter
 import com.example.ecommerce_app.domain.model.Favourite
 
 @Composable
-fun FavouriteItemRow (
+fun FavouriteItemRow(
     product: Favourite,
     onProductClick: () -> Unit,
     onCartClick: () -> Unit,
     onFavoriteClick: () -> Unit
 ) {
     Card(
-    shape = RoundedCornerShape(12.dp),
-    elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-    colors = CardDefaults.cardColors(containerColor = Color(0xFFF5F5F5)), // Light gray background
-    modifier = Modifier
-    .fillMaxWidth()
-    .padding(16.dp)
-    .clickable { onProductClick() }
+        shape = RoundedCornerShape(16.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(12.dp)
+            .clickable { onProductClick() }
     ) {
-        Column {
 
+        Column(modifier = Modifier.fillMaxWidth()) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally)
                     .aspectRatio(1f)
             ) {
                 Image(
                     painter = rememberAsyncImagePainter(product.image),
                     contentDescription = product.title,
-                    contentScale = ContentScale.Fit,
+                    contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
 
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .background(Color.Black.copy(alpha = 0.4f))
+                        .padding(12.dp)
+                ) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text(
+                                text = product.title,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 16.sp,
+                                color = Color.White,
+                                maxLines = 2
+                            )
+                            Text(
+                                text = product.category.uppercase(),
+                                fontSize = 12.sp,
+                                fontWeight = FontWeight.Medium,
+                                color = Color.LightGray
+                            )
+                        }
+
+                        Text(
+                            text = "$${product.price}",
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White,
+                            fontSize = 16.sp,
+                            modifier = Modifier
+                                .background(Color(0xFFE91E63), shape = RoundedCornerShape(12.dp))
+                                .padding(horizontal = 10.dp, vertical = 6.dp)
+                        )
+                    }
+                }
+
                 IconButton(
                     onClick = onFavoriteClick,
-                    modifier = Modifier.align(Alignment.TopEnd)
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
+                        .padding(8.dp)
+                        .background(Color.White.copy(alpha = 0.9f), shape = RoundedCornerShape(50))
                 ) {
                     Icon(
                         imageVector = Icons.Default.FavoriteBorder,
@@ -74,50 +116,34 @@ fun FavouriteItemRow (
                 }
             }
 
-            Column(
+            Row(
                 modifier = Modifier
-                    .fillMaxWidth().padding(10.dp)
-                    .background(Color.White.copy(alpha = 0.2f))
+                    .fillMaxWidth()
+                    .padding(12.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Column(
-                    modifier = Modifier.padding(top = 8.dp)
-                ) {
+                Column {
                     Text(
-                        text = product.title,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp,
-                        maxLines = 1
-                    )
-                    Text(
-                        text = product.category,
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 14.sp,
-                        maxLines = 1,
+                        text = "Saved to Wishlist",
+                        fontSize = 12.sp,
                         color = Color.Gray
                     )
                 }
 
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                IconButton(
+                    onClick = onCartClick,
+                    modifier = Modifier
+                        .background(Color(0xFF4CAF50), shape = RoundedCornerShape(12.dp))
+                        .padding(8.dp)
                 ) {
-                    Text(
-                        text = "$${product.price}",
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black,
-                        fontSize = 16.sp
+                    Icon(
+                        Icons.Default.ShoppingCart,
+                        contentDescription = "Add to Cart",
+                        tint = Color.White
                     )
-                    IconButton(onClick = onCartClick) {
-                        Icon(
-                            Icons.Default.ShoppingCart,
-                            contentDescription = "Add to Cart",
-                            tint = Color.Black
-                        )
-                    }
                 }
             }
-
         }
     }
 }
