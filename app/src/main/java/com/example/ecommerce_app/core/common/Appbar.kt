@@ -23,6 +23,7 @@ fun Appbar(
     onNavigationClick: (() -> Unit)? = null,
     showIcons: Boolean = true,
     navController: NavController,
+    cartCount: Int = 0,
     actions: @Composable RowScope.() -> Unit = {}
 ) {
     var isSearchExpanded by remember { mutableStateOf(false) }
@@ -108,10 +109,16 @@ fun Appbar(
                             Icon(Icons.Default.Search, contentDescription = "Search", tint = Color.White)
                         }
                         if (showIcons) {
-                            IconButton(onClick = {
-                                navController.navigate("cart")
-                            }) {
-                                Icon(Icons.Default.ShoppingCart, contentDescription = "Cart", tint = Color.White)
+                            IconButton(onClick = { navController.navigate("cart") }) {
+                                BadgedBox(
+                                    badge = {
+                                        if (cartCount > 0) {
+                                            Badge { Text(cartCount.toString()) }
+                                        }
+                                    }
+                                ) {
+                                    Icon(Icons.Default.ShoppingCart, contentDescription = "Cart", tint = Color.White)
+                                }
                             }
                         }
                     }

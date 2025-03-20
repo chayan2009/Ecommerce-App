@@ -27,9 +27,16 @@ fun CartListScreen(
     navController: NavController,
     cartViewModel: CartViewmodel = hiltViewModel()
 ) {
+    val cartItems by cartViewModel.carts.collectAsState()
+    val isLoading by cartViewModel.isLoading.collectAsState()
+    val cartCount by cartViewModel.carts.collectAsState()
+
+    LaunchedEffect(Unit) {
+        cartViewModel.getCarts()
+    }
 
     Scaffold(
-        topBar = { Appbar("My Bag", navController = navController) }
+        topBar = { Appbar("My Bag", navController = navController, cartCount = cartCount.size) }
     ) { paddingValues ->
 
         Column(
@@ -37,14 +44,6 @@ fun CartListScreen(
                 .fillMaxSize()
                 .padding(paddingValues),
         ) {
-
-            val cartItems by cartViewModel.carts.collectAsState()
-            val isLoading by cartViewModel.isLoading.collectAsState()
-
-            LaunchedEffect(Unit) {
-                cartViewModel.getCarts()
-            }
-
             if (isLoading) {
                 CircularProgressIndicator(modifier = Modifier.fillMaxSize())
             } else if (cartItems.isEmpty()) {
@@ -53,14 +52,16 @@ fun CartListScreen(
                     fontSize = 18,
                     fontWeight = FontWeight.Medium,
                     color = Color.Red
-                )    } else {
+                )
+            } else {
                 LazyColumn {
                     items(cartItems) { cartItem ->
                         CartItemRow(cartItem, cartViewModel)
                     }
                 }
-                CartTotal(navController,cartViewModel)
+                CartTotal(navController, cartViewModel)
             }
         }
     }
 }
+
