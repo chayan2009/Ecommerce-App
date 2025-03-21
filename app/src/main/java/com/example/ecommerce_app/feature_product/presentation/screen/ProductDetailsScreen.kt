@@ -29,11 +29,11 @@ import com.example.ecommerce_app.feature_product.presentation.viewmodel.ProductV
 @Composable
 fun ProductDetailsScreen(
     navController: NavController,
-    productId: Int,
+    productId: String,
     productViewModel: ProductViewModel
 ) {
     val products by productViewModel.products.collectAsState()
-    val product = products.find { it.id == productId }
+    val product = products.find { it.id == (productId.toIntOrNull() ?: 0) }
     val scrollState = rememberScrollState()
 
     Scaffold(

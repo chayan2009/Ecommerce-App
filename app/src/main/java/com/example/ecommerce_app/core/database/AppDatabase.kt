@@ -12,7 +12,7 @@ import com.example.ecommerce_app.data.source.dto.CartEntity
 import com.example.ecommerce_app.data.source.dto.FavouriteEntity
 import com.example.ecommerce_app.data.source.dto.ProductEntity
 
-@Database(entities = [ProductEntity::class,CartEntity::class,FavouriteEntity::class], version = 8, exportSchema = false)
+@Database(entities = [ProductEntity::class,CartEntity::class,FavouriteEntity::class], version = 9, exportSchema = true)
 @TypeConverters(RatingsConverters::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun productDao(): ProductDao

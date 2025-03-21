@@ -17,10 +17,12 @@ android {
         versionCode = 1
         versionName = "1.0"
         testInstrumentationRunner = "dagger.hilt.android.testing.HiltAndroidTestRunner"
-//        buildConfigField("String", "STRIPE_PUBLISHABLE_KEY", "\"${project.findProperty("stripe.publishable.key")}\"")
-//        buildConfigField("String", "STRIPE_SECRET_KEY", "\"${project.findProperty("stripe.secret.key")}\"")
         buildConfigField("String", "STRIPE_PUBLISHABLE_KEY", "\"${project.findProperty("STRIPE_PUBLISHABLE_KEY")}\"")
-
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += mapOf("room.schemaLocation" to "$projectDir/schemas")
+            }
+        }
     }
 
     buildTypes {

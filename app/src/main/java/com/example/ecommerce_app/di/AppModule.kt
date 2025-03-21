@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.example.ecommerce_app.core.common.Constants
 import com.example.ecommerce_app.core.database.AppDatabase
+import com.example.ecommerce_app.core.database.MIGRATION_1_2
 import com.example.ecommerce_app.data.db.CartDao
 import com.example.ecommerce_app.data.db.FavouriteDao
 import com.example.ecommerce_app.data.db.ProductDao
@@ -111,7 +112,8 @@ object AppModule {
             context.applicationContext,
             AppDatabase::class.java,
             "ecommerced"
-        ).build()
+        ) .addMigrations(MIGRATION_1_2)
+            .build()
     }
     @Provides
     @Singleton

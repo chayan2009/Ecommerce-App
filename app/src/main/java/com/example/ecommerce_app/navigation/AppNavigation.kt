@@ -1,19 +1,20 @@
 package com.example.ecommerce_app.navigation
 
-import androidx.compose.animation.*
+import Screen
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.NavType
-import androidx.navigation.navArgument
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
 import com.example.ecommerce_app.feature_login.LoginScreen
-import com.example.ecommerce_app.feature_product.presentation.screen.ProductDetailsScreen
 import com.example.ecommerce_app.feature_signup.presentation.SignUpScreen
 import com.example.ecommerce_app.feature_splash.SplashScreen
 import com.example.ecommerce_app.feature_welcome.WelcomeScreen
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -92,7 +93,7 @@ fun AppNavigation(navController: NavHostController) {
             popEnterTransition = { popEnterTransition },
             popExitTransition = { popExitTransition }
         ) {
-            MainScreen()
+            MainScreen(navController)
         }
 
     }

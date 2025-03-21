@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.ecommerce_app.R
 import com.example.ecommerce_app.core.utils.Customizedbutton
+import com.example.ecommerce_app.navigation.BottomNavItem
 
 @Composable
 fun OrderSuccessScreen(navController: NavHostController) {
@@ -61,8 +62,14 @@ fun OrderSuccessScreen(navController: NavHostController) {
         Customizedbutton(
             text = "Continue Shopping".lowercase(),
             backgroundColor = Color(0xFF4CAF50),
-            onClick = { navController.navigate(Screen.LoginScreen.route) }
+            onClick = {
+                navController.navigate(BottomNavItem.Home.route) {
+                    popUpTo(BottomNavItem.Home.route) { inclusive = true }
+                }
+            }
         )
+
+
 
 
     }
