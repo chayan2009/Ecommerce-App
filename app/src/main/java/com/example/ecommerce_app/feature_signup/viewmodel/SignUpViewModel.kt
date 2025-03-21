@@ -30,12 +30,12 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
 
     fun onNameChange(newName: String) {
         _name.value = newName
-        _nameError.value = ValidationUtil.validateName(newName)
+        _nameError.value = ValidationUtil.validateUsername(newName)
     }
 
     fun onEmailChange(newEmail: String) {
         _email.value = newEmail
-        _emailError.value = ValidationUtil.validateEmail(newEmail)
+        _emailError.value = ValidationUtil.validateUsername(newEmail)
     }
 
     fun onPasswordChange(newPassword: String) {
@@ -44,8 +44,8 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
     }
 
     fun validateForm(): Boolean {
-        val nameValid = ValidationUtil.validateName(_name.value) == null
-        val emailValid = ValidationUtil.validateEmail(_email.value) == null
+        val nameValid = ValidationUtil.validateUsername(_name.value) == null
+        val emailValid = ValidationUtil.validateUsername(_email.value) == null
         val passwordValid = ValidationUtil.validatePassword(_password.value) == null
 
         return nameValid && emailValid && passwordValid

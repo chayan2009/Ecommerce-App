@@ -5,24 +5,23 @@ import androidx.room.Room
 import com.example.ecommerce_app.core.common.Constants
 import com.example.ecommerce_app.core.database.AppDatabase
 import com.example.ecommerce_app.core.database.MIGRATION_1_2
+import com.example.ecommerce_app.core.datastore.UserPreferences
+import com.example.ecommerce_app.core.datastore.UserPreferencesRepository
 import com.example.ecommerce_app.data.db.CartDao
 import com.example.ecommerce_app.data.db.FavouriteDao
 import com.example.ecommerce_app.data.db.ProductDao
 import com.example.ecommerce_app.data.repository.CartRepositoryImpl
 import com.example.ecommerce_app.data.repository.FavouritesRepositoryImpl
-import com.example.ecommerce_app.data.repository.MockUserRepositoryImpl
 import com.example.ecommerce_app.data.repository.ProductRepositoryImpl
 import com.example.ecommerce_app.data.repository.StripeRepository
 import com.example.ecommerce_app.data.source.api.ProductApi
 import com.example.ecommerce_app.domain.repository.CartRepository
 import com.example.ecommerce_app.domain.repository.FavouriteRepository
 import com.example.ecommerce_app.domain.repository.ProductRepository
-import com.example.ecommerce_app.domain.repository.UserRepository
 import com.example.ecommerce_app.domain.usecase.GetCartsUseCase
 import com.example.ecommerce_app.domain.usecase.GetFavouritesUseCase
 import com.example.ecommerce_app.domain.usecase.GetProductsUseCase
-import com.example.ecommerce_app.domain.usecase.LoginUserUseCase
-import com.example.ecommerce_app.domain.usecase.RegisterUserUseCase
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -75,11 +74,6 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideMockUserRepository(): UserRepository =
-        MockUserRepositoryImpl()
-
-    @Provides
-    @Singleton
     fun provideProductUseCase(repository: ProductRepository): GetProductsUseCase =
         GetProductsUseCase(repository)
 
@@ -92,18 +86,6 @@ object AppModule {
     @Singleton
     fun provideFavouriteUseCase(repository: FavouriteRepository): GetFavouritesUseCase =
         GetFavouritesUseCase(repository)
-
-
-    @Provides
-    fun provideRegisterUserUseCase(repository: UserRepository): RegisterUserUseCase {
-        return RegisterUserUseCase(repository)
-    }
-
-    @Provides
-    fun provideLoginUserUseCase(repository: UserRepository): LoginUserUseCase {
-        return LoginUserUseCase(repository)
-    }
-
 
     @Provides
     @Singleton
@@ -131,4 +113,9 @@ object AppModule {
         return database.favouriteDao()
     }
 
+    @Provides
+    @Singleton
+    fun provideUserPreferencesRepository(@ApplicationContext context: Context): UserPreferencesRepository {
+        return UserPreferencesRepository(context)
+    }
 }
