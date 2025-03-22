@@ -8,6 +8,7 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.ecommerce_app.feature_login.LoginScreen
 import com.example.ecommerce_app.feature_signup.presentation.SignUpScreen
@@ -49,7 +50,7 @@ fun AppNavigation(navController: NavHostController) {
             popEnterTransition = { popEnterTransition },
             popExitTransition = { popExitTransition }
         ) {
-            SplashScreen(navController)
+            SplashScreen(navController, hiltViewModel())
         }
 
         // Welcome Screen

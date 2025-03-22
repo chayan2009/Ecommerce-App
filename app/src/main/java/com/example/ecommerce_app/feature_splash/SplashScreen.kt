@@ -17,16 +17,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.ecommerce_app.R
+import com.example.ecommerce_app.feature_splash.viewmodel.SplashScreenViewModel
 import kotlinx.coroutines.delay
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun SplashScreen(navController: NavController) {
-    LaunchedEffect(Unit) {
+fun SplashScreen(navController: NavController,splashScreenViewModel: SplashScreenViewModel) {
+    val loginState by splashScreenViewModel.loginState.collectAsState()
+
+
+    LaunchedEffect(loginState) {
+
         delay(2000)
-        navController.navigate(Screen.LoginScreen.route) {
-            popUpTo(Screen.LoginScreen.route) { inclusive = true }
+        if (loginState==true){
+            navController.navigate(Screen.MainScreen.route) {
+                popUpTo(Screen.MainScreen.route) { inclusive = true }
+            }
+        }else{
+            navController.navigate(Screen.LoginScreen.route) {
+                popUpTo(Screen.LoginScreen.route) { inclusive = true }
+            }
         }
+
     }
 
     Box(

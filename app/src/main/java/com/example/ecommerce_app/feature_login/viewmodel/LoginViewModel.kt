@@ -29,27 +29,6 @@ class LoginViewModel @Inject constructor(
     private val _loginState = MutableStateFlow<Boolean?>(null)
     val loginState: StateFlow<Boolean?> = _loginState
 
-    init {
-        checkAutoLogin()
-    }
-
-    private fun checkAutoLogin() {
-        viewModelScope.launch {
-            userPreferences.isAutoLoginEnabled()
-                .collect { isAutoLogin ->
-                    if (isAutoLogin) {
-                        userPreferences.getSavedUsername().collect { savedUsername ->
-                            userPreferences.getSavedPassword().collect { savedPassword ->
-                                if (!savedUsername.isNullOrEmpty() && !savedPassword.isNullOrEmpty()) {
-                                    login(savedUsername, savedPassword, autoLogin = true)
-                                }
-                            }
-                        }
-                    }
-                }
-        }
-    }
-
     fun onUsernameChange(newUsername: String) {
         _username.value = newUsername
         _usernameError.value = null
@@ -64,17 +43,6 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             val usernameValue = username.trim()
             val passwordValue = password.trim()
-
-            if (!autoLogin) {
-                _usernameError.value = ValidationUtil.validateUsername(usernameValue)
-                _passwordError.value = ValidationUtil.validatePassword(passwordValue)
-
-                if (_usernameError.value != null || _passwordError.value != null) {
-                    _loginState.value = false
-                    return@launch
-                }
-            }
-
             val isSuccess = performLogin(usernameValue, passwordValue)
             _loginState.value = isSuccess
             if (isSuccess) {
@@ -90,6 +58,7 @@ class LoginViewModel @Inject constructor(
     private fun saveUserCredentials(username: String, password: String) {
         viewModelScope.launch {
             userPreferences.saveUserCredentials(username, password)
+            userPreferences.setAutoLoginEnabled(true)
         }
     }
 
