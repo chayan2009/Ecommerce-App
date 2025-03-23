@@ -9,5 +9,4 @@ interface UserPreferences {
     fun getSavedPassword(): Flow<String?>
     fun isAutoLoginEnabled(): Flow<Boolean>
     suspend fun setAutoLoginEnabled(enabled: Boolean)
-
 }
