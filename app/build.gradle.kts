@@ -113,6 +113,8 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
     testImplementation("com.squareup.okhttp3:mockwebserver:5.0.0-alpha.12")
     androidTestImplementation("com.squareup.okhttp3:mockwebserver:5.0.0-alpha.12")
+    androidTestImplementation("androidx.navigation:navigation-testing:2.7.5")
+    testImplementation("app.cash.turbine:turbine:1.0.0")
 
     // Testing Dependencies
     testImplementation("junit:junit:4.13.2")
@@ -129,6 +131,7 @@ dependencies {
     androidTestImplementation("io.mockk:mockk-android:1.13.7")
     androidTestImplementation("androidx.test:runner:1.5.2")
     androidTestImplementation("androidx.test:core:1.5.0")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
     // Stripe Payment SDK
     implementation("com.stripe:stripe-android:20.39.0")

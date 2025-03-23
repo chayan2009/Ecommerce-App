@@ -1,14 +1,12 @@
 package com.example.ecommerce_app.feature_splash
 
-import androidx.activity.ComponentActivity
-import androidx.compose.runtime.*
-import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.navigation.compose.rememberNavController
+import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.ecommerce_app.MainActivity
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
-import kotlinx.coroutines.delay
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -22,7 +20,7 @@ class SplashScreenTest {
     val hiltRule = HiltAndroidRule(this)
 
     @get:Rule(order = 1)
-    val composeTestRule = createAndroidComposeRule<ComponentActivity>()
+    val composeTestRule = createAndroidComposeRule<MainActivity>()
 
     @Before
     fun setup() {
@@ -30,30 +28,13 @@ class SplashScreenTest {
     }
 
     @Test
-    fun testSplashScreenNavigatesToLogin() {
-        composeTestRule.setContent {
-            val navController = rememberNavController()
-            var loginState by remember { mutableStateOf(false) } // Simulate UI state
+    fun splashScreen_displayedBackgroundImage() {
+        composeTestRule.onNodeWithContentDescription("Splash background").assertExists()
+    }
 
-            LaunchedEffect(Unit) {
-                // Simulate a delay or condition to navigate to LoginScreen
-                delay(2000) // Simulate a 2-second delay
-                loginState = false // Simulate user is not logged in
-                navController.navigate("login") // Navigate to LoginScreen
-            }
-
-           // SplashScreen(navController = navController, loginState = loginState)
-        }
-
-        // Assert splash screen initially exists
+    @Test
+    fun splashScreen_displaysCorrectly() {
+        composeTestRule.waitForIdle()
         composeTestRule.onNodeWithText("Welcome to Ecommerce App").assertExists()
-
-        // Wait for navigation to LoginScreen
-        composeTestRule.waitUntil(timeoutMillis = 3000) {
-            composeTestRule.onAllNodesWithText("Login Screen").fetchSemanticsNodes().isNotEmpty()
-        }
-
-        // Verify Login Screen appears
-        composeTestRule.onNodeWithText("Login Screen").assertExists()
     }
 }

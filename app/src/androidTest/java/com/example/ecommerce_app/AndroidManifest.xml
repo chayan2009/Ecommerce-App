@@ -1,8 +1,0 @@
-<!-- androidTest/AndroidManifest.xml -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.ecommerce_app.test">
-
-    <application
-        android:name="com.example.ecommerce_app.HiltTestApplication"
-    android:usesCleartextTraffic="true"/>
-</manifest>
