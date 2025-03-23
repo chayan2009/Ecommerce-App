@@ -1,4 +1,4 @@
-package com.example.ecommerce_app.feature_profile
+package com.example.ecommerce_app.feature_account
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
@@ -13,9 +13,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.ecommerce_app.core.common.Appbar
-import com.example.ecommerce_app.feature_profile.presentation.ProfileHeader
-import com.example.ecommerce_app.feature_profile.presentation.ProfileOptionsList
-import com.example.ecommerce_app.feature_profile.viewmodel.AccountOptionViewModel
+import com.example.ecommerce_app.feature_account.profile.ProfileHeader
+import com.example.ecommerce_app.feature_account.profile.ProfileOptionsList
+import com.example.ecommerce_app.feature_account.viewmodel.AccountOptionViewModel
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
@@ -31,7 +31,7 @@ fun AccountScreen(
         Appbar("My Profile", navController = navController)
         ProfileHeader()
         Spacer(modifier = Modifier.height(8.dp))
-        ProfileOptionsList(accountOptionViewModel.profileOptions)
+        ProfileOptionsList(navController,accountOptionViewModel.profileOptions)
     }
 }
 

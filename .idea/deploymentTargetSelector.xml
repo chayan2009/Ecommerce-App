@@ -5,13 +5,16 @@
       <SelectionState runConfigName="app">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="SplashScreenTest">
+      <SelectionState runConfigName="LoginScreenTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="splashScreen_displayedBackgroundImage()">
+      <SelectionState runConfigName="loginScreen_displaysUIElements()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="splashScreen_displaysCorrectly()">
+      <SelectionState runConfigName="loginScreen_displaysLoginFailedMessage()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="loginScreen_inputFieldsAreEditable()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

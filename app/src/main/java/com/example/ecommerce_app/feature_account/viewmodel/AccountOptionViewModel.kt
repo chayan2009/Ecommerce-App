@@ -1,9 +1,9 @@
-package com.example.ecommerce_app.feature_profile.viewmodel
+package com.example.ecommerce_app.feature_account.viewmodel
 
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import com.example.ecommerce_app.domain.usecase.GetProductsUseCase
-import com.example.ecommerce_app.feature_profile.model.ProfileOptionItem
+import com.example.ecommerce_app.feature_account.profile.model.ProfileOptionItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -14,10 +14,8 @@ class AccountOptionViewModel@Inject constructor(
 
     var profileOptions = listOf(
         ProfileOptionItem("My Orders", "Already have 12 orders"),
-        ProfileOptionItem("Shipping Addresses", "1 addresses"),
-        ProfileOptionItem("PaymentCard Methods", "Visa **34"),
-        ProfileOptionItem("Promocodes", "You have special prom ocodes"),
         ProfileOptionItem("My Reviews", "Reviews for 0 items"),
-        ProfileOptionItem("Settings", "Notifications, password")
+        ProfileOptionItem("Notifications", "Notifications for 0 items"),
+        ProfileOptionItem("Settings", " password")
     )
 }

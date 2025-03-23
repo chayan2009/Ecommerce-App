@@ -1,10 +1,14 @@
-package com.example.ecommerce_app.feature_profile.presentation
+package com.example.ecommerce_app.feature_account.profile
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -12,20 +16,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.ecommerce_app.feature_profile.model.ProfileOptionItem
 
 @Composable
-fun ProfileOptionsList(viewModel: List<ProfileOptionItem> = hiltViewModel()) {
-    Column {
-        viewModel.forEach { option ->
-            ProfileOption(option)
-        }
-    }
-}
-
-@Composable
-fun ProfileOption(option: ProfileOptionItem) {
+fun ProfileOption(title: String, subtitle: String) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -34,8 +27,8 @@ fun ProfileOption(option: ProfileOptionItem) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(modifier = Modifier.weight(1f)) {
-            Text(option.title, fontSize = 16.sp, fontWeight = FontWeight.Bold)
-            Text(option.subtitle, fontSize = 14.sp, color = Color.Gray)
+            Text(title, fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            Text(subtitle, fontSize = 14.sp, color = Color.Gray)
         }
         Icon(imageVector = Icons.Default.ArrowForward, contentDescription = "Arrow", tint = Color.Gray)
     }
