@@ -24,7 +24,9 @@ fun Appbar(
     showIcons: Boolean = true,
     navController: NavController,
     cartCount: Int = 0,
-    actions: @Composable RowScope.() -> Unit = {}
+    actions: @Composable RowScope.() -> Unit = {
+
+    }
 ) {
     var isSearchExpanded by remember { mutableStateOf(false) }
     var query by remember { mutableStateOf("") }
@@ -35,11 +37,11 @@ fun Appbar(
         systemUiController.setStatusBarColor(color = bgColor)
     }
 
-
     TopAppBar(
         backgroundColor = bgColor,
         elevation = 4.dp
     ) {
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically

@@ -36,7 +36,7 @@ fun CartItemRow(cartItem: Cart, cartViewModel: CartViewmodel = hiltViewModel()) 
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
+                .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
@@ -44,7 +44,7 @@ fun CartItemRow(cartItem: Cart, cartViewModel: CartViewmodel = hiltViewModel()) 
                 contentDescription = cartItem.title,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .size(80.dp)
+                    .size(100.dp)
                     .background(Color.LightGray, shape = RoundedCornerShape(8.dp))
             )
 

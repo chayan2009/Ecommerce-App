@@ -1,4 +1,4 @@
-package com.example.ecommerce_app.feature_profile.presentation
+package com.example.ecommerce_app.feature_account.profile
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

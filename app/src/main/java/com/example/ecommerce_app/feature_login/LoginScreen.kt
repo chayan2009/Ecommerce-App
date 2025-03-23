@@ -7,6 +7,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -44,7 +45,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = hi
                 value = username,
                 onValueChange = { viewModel.onUsernameChange(it) },
                 label = { Text("Enter your username") },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().testTag("UsernameField"),
                 shape = RoundedCornerShape(10.dp),
                 isError = usernameError != null
             )
@@ -52,7 +53,8 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = hi
                 Text(
                     text = it,
                     color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.testTag("UsernameError")
                 )
             }
 
@@ -62,7 +64,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = hi
                 value = password,
                 onValueChange = { viewModel.onPasswordChange(it) },
                 label = { Text("Enter your Password") },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().testTag("PasswordField"),
                 shape = RoundedCornerShape(10.dp),
                 isError = passwordError != null,
                 visualTransformation = PasswordVisualTransformation()
@@ -71,7 +73,8 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = hi
                 Text(
                     text = it,
                     color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.testTag("PasswordError")
                 )
             }
 
@@ -83,7 +86,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = hi
                     viewModel.login()
                 },
                 shape = RoundedCornerShape(24.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth().testTag("Login")
             ) {
                 Text(text = "Login")
             }
@@ -92,7 +95,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = hi
                 Text(
                     text = "Login Failed!",
                     color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.padding(top = 16.dp),
+                    modifier = Modifier.padding(top = 16.dp).testTag("LoginFailedMessage"),
                     style = MaterialTheme.typography.bodyLarge
                 )
             }
