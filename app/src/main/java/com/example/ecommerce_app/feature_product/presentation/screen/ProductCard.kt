@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Card
@@ -21,6 +22,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -37,8 +42,10 @@ fun ProductCard(
     product: Product,
     onProductClick: () -> Unit,
     onCartClick: () -> Unit,
-    onFavoriteClick: () -> Unit
+    onFavoriteClick: (isFavorite: Boolean) -> Unit
 ) {
+    var isFavorite by remember { mutableStateOf(false) }
+
     Card(
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
@@ -48,9 +55,8 @@ fun ProductCard(
             .padding(12.dp)
             .clickable { onProductClick() }
     ) {
-        Column(
-            modifier = Modifier.fillMaxWidth()
-        ) {
+
+        Column(modifier = Modifier.fillMaxWidth()) {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -90,7 +96,6 @@ fun ProductCard(
                                 color = Color.LightGray
                             )
                         }
-
                         Text(
                             text = "$${product.price}",
                             fontWeight = FontWeight.Bold,
@@ -104,15 +109,17 @@ fun ProductCard(
                 }
 
                 IconButton(
-                    onClick = onFavoriteClick,
-                    modifier = Modifier.align(Alignment.TopEnd)
-                        .padding(8.dp)
-                        .background(Color.White.copy(alpha = 0.9f), shape = RoundedCornerShape(50))
+                    onClick = {
+                        isFavorite = !isFavorite
+                        onFavoriteClick(isFavorite)
+                    },
+                    modifier = Modifier
+                        .align(Alignment.TopEnd)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.FavoriteBorder,
-                        contentDescription = "Favorite",
-                        tint = Color.Red
+                        imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        contentDescription = if (isFavorite) "Remove from favorites" else "Add to favorites",
+                        tint = if (isFavorite) Color.Red else Color.Black
                     )
                 }
             }
@@ -129,24 +136,20 @@ fun ProductCard(
                         rating = product.rating.rate,
                         modifier = Modifier.padding(bottom = 4.dp)
                     )
-
                     Text(
                         text = "(${product.rating.count} reviews)",
                         fontSize = 12.sp,
                         color = Color.Gray
                     )
                 }
-
                 IconButton(
                     onClick = onCartClick,
                     modifier = Modifier
-                        .background(Color(0xFF4CAF50), shape = RoundedCornerShape(12.dp))
-                        .padding(8.dp)
                 ) {
                     Icon(
                         Icons.Default.ShoppingCart,
                         contentDescription = "Add to Cart",
-                        tint = Color.White
+                        tint = Color.Black
                     )
                 }
             }

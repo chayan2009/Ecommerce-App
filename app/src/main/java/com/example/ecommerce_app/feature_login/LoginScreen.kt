@@ -1,18 +1,23 @@
 package com.example.ecommerce_app.feature_login
 
 import Screen
+import android.provider.CalendarContract.Colors
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.ecommerce_app.feature_login.viewmodel.LoginViewModel
+
 @Composable
 fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = hiltViewModel()) {
 
@@ -34,7 +39,17 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = hi
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    val gradientBrush = Brush.verticalGradient(
+        colors = listOf(Color(0xFF6DD5FA), Color(0xFFD3D3D3)), // Light Blue to Light Gray
+        startY = 0f,
+        endY = 1000f
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(gradientBrush)
+    ) {
         Column(
             modifier = Modifier
                 .align(Alignment.Center)
@@ -45,7 +60,9 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = hi
                 value = username,
                 onValueChange = { viewModel.onUsernameChange(it) },
                 label = { Text("Enter your username") },
-                modifier = Modifier.fillMaxWidth().testTag("UsernameField"),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("UsernameField"),
                 shape = RoundedCornerShape(10.dp),
                 isError = usernameError != null
             )
@@ -64,7 +81,9 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = hi
                 value = password,
                 onValueChange = { viewModel.onPasswordChange(it) },
                 label = { Text("Enter your Password") },
-                modifier = Modifier.fillMaxWidth().testTag("PasswordField"),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("PasswordField"),
                 shape = RoundedCornerShape(10.dp),
                 isError = passwordError != null,
                 visualTransformation = PasswordVisualTransformation()
@@ -86,7 +105,9 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = hi
                     viewModel.login()
                 },
                 shape = RoundedCornerShape(24.dp),
-                modifier = Modifier.fillMaxWidth().testTag("Login")
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .testTag("Login")
             ) {
                 Text(text = "Login")
             }
@@ -95,8 +116,23 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = hi
                 Text(
                     text = "Login Failed!",
                     color = MaterialTheme.colorScheme.error,
-                    modifier = Modifier.padding(top = 16.dp).testTag("LoginFailedMessage"),
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                        .testTag("LoginFailedMessage"),
                     style = MaterialTheme.typography.bodyLarge
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            TextButton(
+                onClick = {
+                    navController.navigate(Screen.SignUpScreen.route)
+                },
+                modifier = Modifier.testTag("SignUp")
+            ) {
+                Text(
+                    text = "Don't have an account? Sign Up",
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.bodyMedium
                 )
             }
         }

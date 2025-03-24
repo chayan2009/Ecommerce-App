@@ -51,7 +51,7 @@ fun FavouriteScreen(
                         color = Color.Red
                     )
                 } else {
-                    FavouriteItemList(favItems, favouriteScreenViewModel)
+                    FavouriteItemList(navController,favItems, favouriteScreenViewModel)
                 }
             }
         }
