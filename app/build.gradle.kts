@@ -131,8 +131,14 @@ dependencies {
     androidTestImplementation("io.mockk:mockk-android:1.13.7")
     androidTestImplementation("androidx.test:runner:1.5.2")
     androidTestImplementation("androidx.test:core:1.5.0")
-    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 
+    // Mockito Core
+    testImplementation("org.mockito:mockito-core:5.3.1")
+    // Mockito-Kotlin (for better Kotlin support)
+    testImplementation("org.mockito.kotlin:mockito-kotlin:5.0.0")
+    // Mockito Android (for Android tests)
+    androidTestImplementation("org.mockito:mockito-android:5.3.1")
     // Stripe Payment SDK
     implementation("com.stripe:stripe-android:20.39.0")
 }

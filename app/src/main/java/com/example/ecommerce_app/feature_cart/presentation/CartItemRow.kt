@@ -2,6 +2,7 @@ package com.example.ecommerce_app.feature_cart.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -13,17 +14,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
+import com.example.ecommerce_app.R
 import com.example.ecommerce_app.domain.model.Cart
 import com.example.ecommerce_app.feature_cart.viewmodel.CartViewmodel
-
 @Composable
 fun CartItemRow(cartItem: Cart, cartViewModel: CartViewmodel = hiltViewModel()) {
-
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -32,7 +33,6 @@ fun CartItemRow(cartItem: Cart, cartViewModel: CartViewmodel = hiltViewModel()) 
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White)
     ) {
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -50,9 +50,7 @@ fun CartItemRow(cartItem: Cart, cartViewModel: CartViewmodel = hiltViewModel()) 
 
             Spacer(modifier = Modifier.width(12.dp))
 
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
+            Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = cartItem.title,
                     fontSize = 14.sp,
@@ -67,39 +65,36 @@ fun CartItemRow(cartItem: Cart, cartViewModel: CartViewmodel = hiltViewModel()) 
                     color = Color(0xFF388E3C),
                     fontWeight = FontWeight.SemiBold
                 )
-
+                Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.End
+                    horizontalArrangement = Arrangement.End,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     IconButton(
-                        onClick = { cartViewModel.addCartItem(cartItem) },
-                        modifier = Modifier.size(28.dp)
+                        onClick = { cartViewModel.removeCartItem(cartItem.id) },
+                        modifier = Modifier.size(32.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Add,
-                            contentDescription = "Increase",
-                            tint = Color.Blue
+                        Image(
+                            painter = painterResource(R.drawable.minus_icon),
+                            contentDescription = "Remove item",
+                            modifier = Modifier.size(24.dp)
                         )
                     }
-
                     Text(
                         text = cartItem.quantity.toString(),
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .align(Alignment.CenterVertically)
+                        modifier = Modifier.padding(horizontal = 8.dp)
                     )
-
                     IconButton(
-                        onClick = { cartViewModel.removeCartItem(cartItem.id) },
-                        modifier = Modifier.size(28.dp)
+                        onClick = { cartViewModel.addCartItem(cartItem) },
+                        modifier = Modifier.size(32.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.Default.Delete,
-                            contentDescription = "Remove",
-                            tint = Color.Red
+                        Image(
+                            painter = painterResource(R.drawable.add_icons),
+                            contentDescription = "Add item",
+                            modifier = Modifier.size(24.dp)
                         )
                     }
                 }

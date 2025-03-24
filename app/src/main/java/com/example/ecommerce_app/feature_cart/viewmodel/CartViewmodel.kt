@@ -47,31 +47,39 @@ class CartViewmodel @Inject constructor(
 
     fun addCartItem(cart: Cart) {
         viewModelScope.launch {
-            val currentList = _carts.value.toMutableList()
-            val index = currentList.indexOfFirst { it.id == cart.id }
+            val updatedList = _carts.value.toMutableList()
+            val index = updatedList.indexOfFirst { it.id == cart.id }
+
             if (index != -1) {
-                val updatedItem = currentList[index].copy(quantity = currentList[index].quantity + 1)
-                currentList[index] = updatedItem
+                val updatedItem =
+                    updatedList[index].copy(quantity = updatedList[index].quantity + 1)
+                updatedList[index] = updatedItem
             } else {
-                currentList.add(cart.copy(quantity = 1))
+                updatedList.add(cart.copy(quantity = 1))
             }
-            _carts.value = currentList
+
+            _carts.value = updatedList
+            getCartsUseCase.addCartItem(cart)
         }
     }
 
     fun removeCartItem(id: Int) {
         viewModelScope.launch {
-            val currentList = _carts.value.toMutableList()
-            val index = currentList.indexOfFirst { it.id == id }
+            val updatedList = _carts.value.toMutableList()
+            val index = updatedList.indexOfFirst { it.id == id }
+
             if (index != -1) {
-                val currentItem = currentList[index]
+                val currentItem = updatedList[index]
+
                 if (currentItem.quantity > 1) {
-                    currentList[index] = currentItem.copy(quantity = currentItem.quantity - 1)
+                    updatedList[index] = currentItem.copy(quantity = currentItem.quantity - 1)
                 } else {
-                    currentList.removeAt(index)
+                    updatedList.removeAt(index)
                 }
+
+                _carts.value = updatedList
+                getCartsUseCase.removeCartItem(id)
             }
-            _carts.value = currentList
         }
     }
 }

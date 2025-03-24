@@ -1,16 +1,17 @@
 package com.example.ecommerce_app.feature_signup.presentation
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.*
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -18,7 +19,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.ecommerce_app.feature_signup.SignUpViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel = hiltViewModel()) {
     val name by viewModel.name.collectAsState()
@@ -29,7 +29,18 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel = 
     val emailError by viewModel.emailError.collectAsState()
     val passwordError by viewModel.passwordError.collectAsState()
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    val gradientBrush = Brush.verticalGradient(
+        colors = listOf(Color(0xFF6DD5FA), Color(0xFFD3D3D3)), // Light Blue to Light Gray
+        startY = 0f,
+        endY = 1000f
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(gradientBrush)
+            .padding(horizontal = 24.dp, vertical = 32.dp)
+    ) {
         Column(modifier = Modifier.align(Alignment.TopStart)) {
             IconButton(
                 onClick = { navController.popBackStack() },
@@ -37,65 +48,69 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel = 
             ) {
                 Icon(
                     imageVector = Icons.Default.ArrowBack,
-                    contentDescription = "Back"
+                    contentDescription = "Back",
+                    tint = Color.White
                 )
             }
             Text(
-                text = "Sign Up",
-                color = MaterialTheme.colorScheme.primary,
+                text = "Create Account",
+                color = Color.White,
                 fontWeight = FontWeight.Bold,
-                fontSize = 35.sp,
+                fontSize = 32.sp,
                 modifier = Modifier.padding(16.dp)
             )
         }
+
         Column(
             modifier = Modifier
+                .fillMaxWidth()
                 .align(Alignment.Center)
-                .offset(y = (-50).dp)
-                .padding(horizontal = 32.dp),
+                .padding(horizontal = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             OutlinedTextField(
                 value = name,
                 onValueChange = { viewModel.onNameChange(it) },
-                label = { Text("Enter your name") },
+                label = { Text("Enter your name", color = Color.White) },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(12.dp),
                 isError = nameError != null
             )
             nameError?.let {
                 Text(text = it, color = Color.Red, fontSize = 12.sp)
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
                 value = email,
                 onValueChange = { viewModel.onEmailChange(it) },
-                label = { Text("Enter your email") },
+                label = { Text("Enter your email", color = Color.White) },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(12.dp),
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
                 isError = emailError != null
             )
             emailError?.let {
                 Text(text = it, color = Color.Red, fontSize = 12.sp)
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             OutlinedTextField(
                 value = password,
                 onValueChange = { viewModel.onPasswordChange(it) },
-                label = { Text("Enter your Password") },
+                label = { Text("Enter your password", color = Color.White) },
                 modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(10.dp),
+                shape = RoundedCornerShape(12.dp),
+                keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
                 isError = passwordError != null
             )
             passwordError?.let {
                 Text(text = it, color = Color.Red, fontSize = 12.sp)
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(24.dp))
 
             Button(
                 onClick = {
@@ -104,26 +119,35 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel = 
                     }
                 },
                 shape = RoundedCornerShape(24.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(50.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.White)
             ) {
-                Text(text = "Sign Up")
+                Text(text = "Sign Up", color = Color(0xFF880E4F), fontSize = 18.sp, fontWeight = FontWeight.Bold)
             }
 
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
+                horizontalArrangement = Arrangement.Center
             ) {
                 Text(
-                    text = "Already have an account?",
-                    color = MaterialTheme.colorScheme.primary,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        textDecoration = TextDecoration.Underline
-                    ),
-                    modifier = Modifier.clickable { }
+                    text = "Already have an account? ",
+                    color = Color.White,
+                    fontSize = 14.sp
+                )
+                Text(
+                    text = "Log in",
+                    color = Color.White,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    textDecoration = TextDecoration.Underline,
+                    modifier = Modifier.clickable { /* Navigate to Login */ }
                 )
             }
         }
     }
 }
+

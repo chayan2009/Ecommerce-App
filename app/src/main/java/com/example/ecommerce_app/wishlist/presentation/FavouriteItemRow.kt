@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material3.Card
@@ -21,6 +22,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,14 +34,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
+import com.example.ecommerce_app.core.common.RatingBar
 import com.example.ecommerce_app.domain.model.Favourite
-
 @Composable
 fun FavouriteItemRow(
-    product: Favourite,
+    favourite: Favourite,
+    isFavorite: Boolean,
     onProductClick: () -> Unit,
     onCartClick: () -> Unit,
-    onFavoriteClick: () -> Unit
+    onFavoriteClick: (favourite: Favourite, isFavorite: Boolean) -> Unit
 ) {
     Card(
         shape = RoundedCornerShape(16.dp),
@@ -47,7 +53,6 @@ fun FavouriteItemRow(
             .padding(12.dp)
             .clickable { onProductClick() }
     ) {
-
         Column(modifier = Modifier.fillMaxWidth()) {
             Box(
                 modifier = Modifier
@@ -55,8 +60,8 @@ fun FavouriteItemRow(
                     .aspectRatio(1f)
             ) {
                 Image(
-                    painter = rememberAsyncImagePainter(product.image),
-                    contentDescription = product.title,
+                    painter = rememberAsyncImagePainter(favourite.image),
+                    contentDescription = favourite.title,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier.fillMaxSize()
                 )
@@ -75,14 +80,14 @@ fun FavouriteItemRow(
                     ) {
                         Column(modifier = Modifier.weight(1f)) {
                             Text(
-                                text = product.title,
+                                text = favourite.title,
                                 fontWeight = FontWeight.Bold,
                                 fontSize = 16.sp,
                                 color = Color.White,
                                 maxLines = 2
                             )
                             Text(
-                                text = product.category.uppercase(),
+                                text = favourite.category.uppercase(),
                                 fontSize = 12.sp,
                                 fontWeight = FontWeight.Medium,
                                 color = Color.LightGray
@@ -90,7 +95,7 @@ fun FavouriteItemRow(
                         }
 
                         Text(
-                            text = "$${product.price}",
+                            text = "$${favourite.price}",
                             fontWeight = FontWeight.Bold,
                             color = Color.White,
                             fontSize = 16.sp,
@@ -102,16 +107,13 @@ fun FavouriteItemRow(
                 }
 
                 IconButton(
-                    onClick = onFavoriteClick,
-                    modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(8.dp)
-                        .background(Color.White.copy(alpha = 0.9f), shape = RoundedCornerShape(50))
+                    onClick = { onFavoriteClick(favourite, !isFavorite) },
+                    modifier = Modifier.align(Alignment.TopEnd)
                 ) {
                     Icon(
-                        imageVector = Icons.Default.FavoriteBorder,
-                        contentDescription = "Favorite",
-                        tint = Color.Red
+                        imageVector = if (isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
+                        contentDescription = if (isFavorite) "Remove from favorites" else "Add to favorites",
+                        tint = if (isFavorite) Color.Red else Color.White
                     )
                 }
             }
@@ -124,8 +126,12 @@ fun FavouriteItemRow(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Column {
+                    RatingBar(
+                        rating = 4.5,
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
                     Text(
-                        text = "Saved to Wishlist",
+                        text = "(${5} reviews)",
                         fontSize = 12.sp,
                         color = Color.Gray
                     )
@@ -133,17 +139,16 @@ fun FavouriteItemRow(
 
                 IconButton(
                     onClick = onCartClick,
-                    modifier = Modifier
-                        .background(Color(0xFF4CAF50), shape = RoundedCornerShape(12.dp))
-                        .padding(8.dp)
                 ) {
                     Icon(
                         Icons.Default.ShoppingCart,
                         contentDescription = "Add to Cart",
-                        tint = Color.White
+                        tint = Color.Black
                     )
                 }
             }
         }
     }
 }
+
+

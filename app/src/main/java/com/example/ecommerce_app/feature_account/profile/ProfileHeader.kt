@@ -28,9 +28,10 @@ fun ProfileHeader() {
             .fillMaxWidth()
             .padding(16.dp)
     ) {
+
         Row(verticalAlignment = Alignment.CenterVertically) {
             Image(
-                painter = rememberAsyncImagePainter("https://randomuser.me/api/portraits/women/68.jpg"),
+                painter = rememberAsyncImagePainter("s"),
                 contentDescription = "Profile Picture",
                 modifier = Modifier
                     .size(60.dp)
@@ -41,8 +42,8 @@ fun ProfileHeader() {
             Spacer(modifier = Modifier.width(12.dp))
 
             Column {
-                Text("Matilda Brown", fontSize = 18.sp, fontWeight = FontWeight.Bold)
-                Text("matildabrown@mail.com", fontSize = 14.sp, color = Color.Gray)
+                Text("chayan chwodhury", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+                Text("chayanchwodhury@mail.com", fontSize = 14.sp, color = Color.Gray)
             }
         }
     }
