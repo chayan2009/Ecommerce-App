@@ -13,6 +13,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.ecommerce_app.domain.model.Cart
+import com.example.ecommerce_app.domain.model.Favourite
 import com.example.ecommerce_app.domain.model.Product
 import com.example.ecommerce_app.feature_product.presentation.viewmodel.ProductViewModel
 
@@ -30,7 +32,39 @@ fun RecommendedProductsSection(
             modifier = Modifier.padding(16.dp)
         )
         LazyRow(contentPadding = PaddingValues(16.dp)) {
-            items(products) { product -> RecommendedProductCard(product) }
+            items(products) { product ->
+                RecommendedProductCard(
+                    product = product,
+                    onProductClick = { navController.navigate("product_details/${'$'}{product.id}") },
+                    onCartClick = {
+                        viewModel.addToCart(
+                            Cart(
+                                product.id,
+                                product.title,
+                                product.price,
+                                product.description,
+                                product.category,
+                                product.image,
+                                1
+                            )
+                        )
+                        navController.navigate("cart")
+                    },
+                    onFavoriteClick = {
+                        viewModel.addToFavourite(
+                            Favourite(
+                                product.id,
+                                product.title,
+                                product.price,
+                                product.description,
+                                product.category,
+                                product.image
+                            )
+                        )
+                        navController.navigate("wishlist/${'$'}{product.id}")
+                    },
+                )
+            }
         }
     }
 }

@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -34,7 +35,7 @@ fun WelcomeScreen(navController: NavController) {
             )
             Button(
                 onClick = { navController.navigate(Screen.LoginScreen.route) },
-                modifier = Modifier
+                modifier = Modifier.testTag("SignInButton")
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp)
             ) {
@@ -42,7 +43,7 @@ fun WelcomeScreen(navController: NavController) {
             }
             Button(
                 onClick = { navController.navigate(Screen.SignUpScreen.route) },
-                modifier = Modifier
+                modifier = Modifier.testTag("SignUpButton")
                     .fillMaxWidth()
                     .padding(horizontal = 32.dp)
             ) {

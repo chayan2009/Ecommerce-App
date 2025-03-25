@@ -8,13 +8,16 @@
       <SelectionState runConfigName="LoginScreenTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="loginScreen_inputFieldsAreEditable()">
+      <SelectionState runConfigName="SplashScreenTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="OrdersScreenTest">
+      <SelectionState runConfigName="WelcomeScreenTest">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
-      <SelectionState runConfigName="ordersScreen_displaysTabsAndOrders()">
+      <SelectionState runConfigName="welcomeScreen_displaysCorrectly()">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
+      <SelectionState runConfigName="welcomeScreen_displayedText()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>
