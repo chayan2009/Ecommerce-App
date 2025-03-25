@@ -35,6 +35,7 @@ class CategoryScreenViewModel @Inject constructor(
     init {
         fetchData()
     }
+
     private fun fetchData() {
         viewModelScope.launch(Dispatchers.IO) {
             _isLoading.value = true
