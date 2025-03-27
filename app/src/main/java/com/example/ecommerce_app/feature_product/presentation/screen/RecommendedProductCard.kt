@@ -98,7 +98,9 @@ fun RecommendedProductCard(
             }
 
             IconButton(
-                onClick = { isFavorite = !isFavorite },
+                onClick = { isFavorite = !isFavorite
+                    onFavoriteClick(isFavorite)
+                          },
                 modifier = Modifier.align(Alignment.TopEnd)
             ) {
                 Icon(

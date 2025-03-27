@@ -8,7 +8,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -19,18 +18,20 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.ecommerce_app.core.common.Appbar
+import com.example.ecommerce_app.core.common.NavigationIconType
 import com.example.ecommerce_app.domain.model.Cart
 import com.example.ecommerce_app.feature_product.presentation.viewmodel.ProductViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductDetailsScreen(
     navController: NavController,
     productId: String,
-    productViewModel: ProductViewModel
+    productViewModel: ProductViewModel= hiltViewModel()
 ) {
     val products by productViewModel.products.collectAsState()
     val product = products.find { it.id == (productId.toIntOrNull() ?: 0) }
@@ -38,13 +39,13 @@ fun ProductDetailsScreen(
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { product?.title?.let { Text(text = it, fontSize = 16.sp) } },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
-                    }
-                }
+            Appbar(
+                title = product?.title ?: "Product Details",
+                bgColor = Color(0xFF6200EA),
+                navigationIconType = NavigationIconType.BACK,
+                onNavigationClick = { navController.popBackStack() },
+                navController = navController,
+                cartCount = productViewModel.totalCount.collectAsState().value
             )
         }
     ) {
@@ -69,7 +70,7 @@ fun ProductDetailsScreen(
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .verticalScroll(scrollState),
+                        .verticalScroll(rememberScrollState()),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Spacer(modifier = Modifier.height(20.dp))
@@ -144,4 +145,5 @@ fun ProductDetailsScreen(
             }
         }
     }
+
 }

@@ -1,5 +1,6 @@
 package com.example.ecommerce_app.navigation
 import CategoryScreen
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -36,7 +37,8 @@ fun BottomNavGraph(navController: NavHostController) {
 
         composable("product_details/{id}") { backStackEntry ->
             val productId = backStackEntry.arguments?.getString("id") ?: "Unknown"
-            ProductDetailsScreen(navController, productId.toString(), hiltViewModel())
+            Log.v(("@@@@"),""+productId)
+            ProductDetailsScreen(navController, productId, hiltViewModel())
         }
         composable("checkout/{price}/{count}") { backStackEntry ->
             val price = backStackEntry.arguments?.getString("price")?.toDoubleOrNull() ?: 0.0

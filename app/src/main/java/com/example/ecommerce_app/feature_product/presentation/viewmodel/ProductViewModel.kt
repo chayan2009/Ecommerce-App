@@ -11,7 +11,11 @@ import com.example.ecommerce_app.domain.usecase.GetProductsUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,6 +25,9 @@ class ProductViewModel @Inject constructor(
     private val getFavouritesUseCase: GetFavouritesUseCase
 ) : ViewModel() {
 
+    private val _carts = MutableStateFlow<List<Cart>>(emptyList())
+    val carts: StateFlow<List<Cart>> = _carts.asStateFlow()
+
     private val _categories = MutableStateFlow<List<String>>(emptyList())
     val categories: StateFlow<List<String>> = _categories
 
@@ -29,6 +36,11 @@ class ProductViewModel @Inject constructor(
 
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading
+
+    val totalCount: StateFlow<Int> = _carts.map { carts ->
+        carts.sumOf { it.quantity }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
+
 
     init {
         fetchData()
@@ -84,4 +96,5 @@ class ProductViewModel @Inject constructor(
                 .onFailure { it.printStackTrace() }
         }
     }
+
 }

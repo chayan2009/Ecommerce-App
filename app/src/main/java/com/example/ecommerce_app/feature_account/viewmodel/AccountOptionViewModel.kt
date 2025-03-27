@@ -13,7 +13,7 @@ class AccountOptionViewModel@Inject constructor(
 ) : ViewModel() {
 
     var profileOptions = listOf(
-        ProfileOptionItem("My Orders", "Already have 12 orders"),
+        ProfileOptionItem("Order History", "Already have 12 orders"),
         ProfileOptionItem("My Reviews", "Reviews for 0 items"),
         ProfileOptionItem("Notifications", "Notifications for 0 items"),
         ProfileOptionItem("Settings", " password")

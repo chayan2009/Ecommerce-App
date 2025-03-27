@@ -64,7 +64,9 @@ fun ProductListScreen(navController: NavController, viewModel: ProductViewModel 
                     items(filteredProducts) { product ->
                         ProductCard(
                             product = product,
-                            onProductClick = { navController.navigate("product_details/${'$'}{product.id}") },
+                            onProductClick = {
+                                navController.navigate("product_details/${product.id}")
+                            },
                             onCartClick = {
                                 viewModel.addToCart(
                                     Cart(
@@ -90,7 +92,7 @@ fun ProductListScreen(navController: NavController, viewModel: ProductViewModel 
                                         product.image
                                     )
                                 )
-                                navController.navigate("wishlist/${'$'}{product.id}")
+                                navController.navigate("wishlist/${product.id}")
                             },
                         )
                     }

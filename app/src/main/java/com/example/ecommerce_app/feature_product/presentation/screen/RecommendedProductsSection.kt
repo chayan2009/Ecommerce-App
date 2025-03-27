@@ -35,7 +35,8 @@ fun RecommendedProductsSection(
             items(products) { product ->
                 RecommendedProductCard(
                     product = product,
-                    onProductClick = { navController.navigate("product_details/${'$'}{product.id}") },
+                    onProductClick = {
+                        navController.navigate("product_details/${product.id}")                                     },
                     onCartClick = {
                         viewModel.addToCart(
                             Cart(
@@ -61,7 +62,7 @@ fun RecommendedProductsSection(
                                 product.image
                             )
                         )
-                        navController.navigate("wishlist/${'$'}{product.id}")
+                        navController.navigate("wishlist/${product.id}")
                     },
                 )
             }

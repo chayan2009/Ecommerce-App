@@ -76,7 +76,6 @@ class CartViewmodel @Inject constructor(
                 } else {
                     updatedList.removeAt(index)
                 }
-
                 _carts.value = updatedList
                 getCartsUseCase.removeCartItem(id)
             }
