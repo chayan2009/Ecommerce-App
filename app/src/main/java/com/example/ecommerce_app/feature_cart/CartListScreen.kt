@@ -11,6 +11,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -30,13 +33,14 @@ fun CartListScreen(
     val cartItems by cartViewModel.carts.collectAsState()
     val isLoading by cartViewModel.isLoading.collectAsState()
     val cartCount by cartViewModel.carts.collectAsState()
+    var searchQuery by remember { mutableStateOf("") }
 
     LaunchedEffect(Unit) {
         cartViewModel.getCarts()
     }
 
     Scaffold(
-        topBar = { Appbar("My Bag", navController = navController, cartCount = cartCount.size) }
+        topBar = { Appbar("My Bag", navController = navController, cartCount = cartCount.size,onSearchQueryChanged = { searchQuery = it }) }
     ) { paddingValues ->
 
         Column(

@@ -23,7 +23,7 @@ fun SettingsScreen(navController: NavController) {
 
     Scaffold(
         topBar = {
-            Appbar(title = "Settings", navController = navController)
+            Appbar(title = "Settings", navController = navController,onSearchQueryChanged = { })
         }
     ) { paddingValues ->
         Column(

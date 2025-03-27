@@ -24,12 +24,12 @@ class CartViewmodel @Inject constructor(
     private val _isLoading = MutableStateFlow(true)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    val totalItems: StateFlow<Any> = _carts.map { carts ->
+    val totalAmount: StateFlow<Any> = _carts.map { carts ->
         carts.sumOf { it.price }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
 
     val totalCount: StateFlow<Any> = _carts.map { carts ->
-        carts.sumOf { it.quantity }
+        carts.sumOf { it.quantity  }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
 
     init {
@@ -47,40 +47,36 @@ class CartViewmodel @Inject constructor(
 
     fun addCartItem(cart: Cart) {
         viewModelScope.launch {
-            val updatedList = _carts.value.toMutableList()
-            val index = updatedList.indexOfFirst { it.id == cart.id }
+            val updatedList = _carts.value.map {
+                if (it.id == cart.id) it.copy(quantity = it.quantity + 1)
+                else it
+            }.toMutableList()
 
-            if (index != -1) {
-                val updatedItem =
-                    updatedList[index].copy(quantity = updatedList[index].quantity + 1)
-                updatedList[index] = updatedItem
-            } else {
+            if (updatedList.none { it.id == cart.id }) {
                 updatedList.add(cart.copy(quantity = 1))
             }
 
-            _carts.value = updatedList
+            _carts.value = updatedList.toList()
             getCartsUseCase.addCartItem(cart)
         }
     }
 
     fun removeCartItem(id: Int) {
         viewModelScope.launch {
-            val updatedList = _carts.value.toMutableList()
-            val index = updatedList.indexOfFirst { it.id == id }
-
-            if (index != -1) {
-                val currentItem = updatedList[index]
-
-                if (currentItem.quantity > 1) {
-                    updatedList[index] = currentItem.copy(quantity = currentItem.quantity - 1)
-                } else {
-                    updatedList.removeAt(index)
+            val updatedList = _carts.value.mapNotNull {
+                when {
+                    it.id == id && it.quantity > 1 -> it.copy(quantity = it.quantity - 1)
+                    it.id == id -> null
+                    else -> it
                 }
-                _carts.value = updatedList
-                getCartsUseCase.removeCartItem(id)
             }
+
+            _carts.value = updatedList
+            getCartsUseCase.removeCartItem(id)
         }
     }
+
+
 }
 
 

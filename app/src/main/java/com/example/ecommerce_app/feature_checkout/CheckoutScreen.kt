@@ -40,7 +40,7 @@ fun CheckoutScreen(navController: NavController, price: Double, count: Int) {
     val totalAmount = price * count + deliveryFee
 
     Scaffold(
-        topBar = { Appbar("Check Out", navController = navController) }
+        topBar = { Appbar("Check Out", navController = navController,onSearchQueryChanged = {  }) }
     ) { paddingValues ->
 
         Column(

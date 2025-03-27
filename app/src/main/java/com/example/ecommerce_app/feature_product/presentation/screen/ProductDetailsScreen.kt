@@ -36,6 +36,7 @@ fun ProductDetailsScreen(
     val products by productViewModel.products.collectAsState()
     val product = products.find { it.id == (productId.toIntOrNull() ?: 0) }
     val scrollState = rememberScrollState()
+    var searchQuery by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -45,7 +46,7 @@ fun ProductDetailsScreen(
                 navigationIconType = NavigationIconType.BACK,
                 onNavigationClick = { navController.popBackStack() },
                 navController = navController,
-                cartCount = productViewModel.totalCount.collectAsState().value
+                cartCount = productViewModel.totalCount.collectAsState().value,onSearchQueryChanged = { searchQuery = it }
             )
         }
     ) {

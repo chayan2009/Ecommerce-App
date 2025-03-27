@@ -20,7 +20,7 @@ import com.example.ecommerce_app.feature_cart.viewmodel.CartViewmodel
 
 @Composable
 fun CartTotal(navController: NavController, cartViewModel: CartViewmodel) {
-    val totalItems by cartViewModel.totalItems.collectAsState()
+    val totalItems by cartViewModel.totalAmount.collectAsState()
     val totalCounts by cartViewModel.totalCount.collectAsState()
 
     Column(

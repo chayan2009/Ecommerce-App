@@ -23,12 +23,13 @@ fun AccountScreen(
     navController: NavController,
     accountOptionViewModel: AccountOptionViewModel = hiltViewModel()
 ) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
     ) {
-        Appbar("My Profile", navController = navController)
+        Appbar("My Profile", navController = navController, showIcons = false, onSearchQueryChanged = {})
         ProfileHeader()
         Spacer(modifier = Modifier.height(8.dp))
         ProfileOptionsList(navController,accountOptionViewModel.profileOptions)

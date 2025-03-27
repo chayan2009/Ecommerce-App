@@ -48,7 +48,7 @@ fun CategoryScreen(
     var selectedCategory by remember { mutableStateOf(categoryList.firstOrNull() ?: "All") }
 
     Scaffold(
-        topBar = { Appbar("Categories", navController = navController) }
+        topBar = { Appbar("Categories", navController = navController,onSearchQueryChanged = {  }) }
     ) { paddingValues ->
 
         Column(
