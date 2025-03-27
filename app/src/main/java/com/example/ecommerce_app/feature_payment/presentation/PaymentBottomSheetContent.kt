@@ -9,10 +9,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.ecommerce_app.core.utils.Customizedbutton
+import com.example.ecommerce_app.core.notification.RequestNotificationPermission
+import com.example.ecommerce_app.core.notification.createNotificationChannel
+import com.example.ecommerce_app.core.notification.showOrderNotification
 
 @Composable
 fun PaymentBottomSheetContent(
@@ -24,6 +28,14 @@ fun PaymentBottomSheetContent(
     val paymentMethods = listOf("Credit Card", "Google Pay", "PayPal")
     var selectedMethod by remember { mutableStateOf(paymentMethods[0]) }
 
+    val context = LocalContext.current
+    var requestPermission by remember { mutableStateOf(false) }
+
+    if (requestPermission) {
+        RequestNotificationPermission()
+        requestPermission = false
+    }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -31,6 +43,7 @@ fun PaymentBottomSheetContent(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         Text("Select Payment Method", fontWeight = FontWeight.Bold, fontSize = 18.sp)
+
         LazyColumn {
             items(paymentMethods) { method ->
                 Row(
@@ -66,9 +79,13 @@ fun PaymentBottomSheetContent(
 
         Customizedbutton(
             text = "Pay Now".lowercase(),
-            onClick = { onPaymentConfirmed()}
+            onClick = {
+                createNotificationChannel(context)
+                requestPermission = true
+                showOrderNotification(context)
+                onPaymentConfirmed()
+            }
         )
     }
-
 }
 

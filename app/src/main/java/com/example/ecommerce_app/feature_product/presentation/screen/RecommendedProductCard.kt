@@ -48,8 +48,8 @@ fun RecommendedProductCard(
         shape = RoundedCornerShape(12.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         modifier = Modifier
-            .width(180.dp)
-            .height(260.dp)
+            .width(220.dp)
+            .height(260.dp).padding(horizontal = 5.dp)
             .clickable { onProductClick()}
     ) {
         Box(modifier = Modifier.fillMaxSize()) {

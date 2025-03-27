@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.ecommerce_app.core.common.Appbar
 import com.example.ecommerce_app.feature_account.notification.viewmodel.NotificationsScreenViewModel
 
 
@@ -19,11 +20,7 @@ fun NotificationsScreen(navController: NavController,notificationsScreenViewMode
 
     Scaffold(
         topBar = {
-            TopAppBar(
-                title = { Text("Notifications") },
-                backgroundColor = Color.White,
-                elevation = 4.dp
-            )
+            Appbar("Notifications", navController = navController,onSearchQueryChanged = { })
         }
     ) { paddingValues ->
         Column(

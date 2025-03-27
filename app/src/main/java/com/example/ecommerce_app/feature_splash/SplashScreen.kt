@@ -60,7 +60,7 @@ fun SplashScreen(navController: NavController,splashScreenViewModel: SplashScree
 
             Text(
                 text = "Welcome to Ecommerce App",
-                fontSize = 28.sp,
+                fontSize = 18.sp,
                 color = Color.White,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.align(Alignment.Center)
