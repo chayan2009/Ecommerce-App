@@ -9,9 +9,8 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.compose.rememberNavController
-import com.example.ecommerce_app.navigation.AppNavigation
 import com.example.clean_architecture_android.ui.theme.CleanArchitectureAndroidTheme
+import com.example.ecommerce_app.navigation.RootNavigation
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -23,15 +22,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             CleanArchitectureAndroidTheme {
-                val navController = rememberNavController()
                 Scaffold(modifier = Modifier.fillMaxSize()) {
-                    AppNavigation(navController = navController)
+                    RootNavigation()
                 }
             }
         }
     }
 }
-
 
 @Composable
 fun Greeting(name: String, modifier: Modifier = Modifier) {

@@ -1,7 +1,8 @@
 package com.example.ecommerce_app.feature_account.myorder.viewmodel
 
 import com.example.ecommerce_app.core.datastore.UserPreferences
-import com.example.ecommerce_app.feature_account.myorder.OrderStatus
+import com.example.ecommerce_app.feature_account.history.OrderStatus
+import com.example.ecommerce_app.feature_account.history.viewmodel.OrdersScreenViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest

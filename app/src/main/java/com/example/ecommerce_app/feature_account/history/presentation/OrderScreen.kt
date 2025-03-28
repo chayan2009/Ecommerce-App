@@ -1,4 +1,4 @@
-package com.example.ecommerce_app.feature_account.myorder.presentation
+package com.example.ecommerce_app.feature_account.history.presentation
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -12,9 +12,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.ecommerce_app.feature_account.myorder.OrderStatus
-import com.example.ecommerce_app.feature_account.myorder.model.Order
-import com.example.ecommerce_app.feature_account.myorder.viewmodel.OrdersScreenViewModel
+import com.example.ecommerce_app.feature_account.history.OrderStatus
+import com.example.ecommerce_app.feature_account.history.model.Order
+import com.example.ecommerce_app.feature_account.history.viewmodel.OrdersScreenViewModel
 
 
 @Composable

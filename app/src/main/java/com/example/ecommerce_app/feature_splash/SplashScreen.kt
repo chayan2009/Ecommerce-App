@@ -27,19 +27,33 @@ fun SplashScreen(navController: NavController,splashScreenViewModel: SplashScree
 
 
     LaunchedEffect(loginState) {
-
         delay(2000)
-        if (loginState==true){
-            navController.navigate(Screen.MainScreen.route) {
-                popUpTo(Screen.MainScreen.route) { inclusive = true }
+        if (loginState == true) {
+            navController.navigate("main") {
+                popUpTo("auth") { inclusive = true }
             }
-        }else{
+        } else {
             navController.navigate(Screen.LoginScreen.route) {
-                popUpTo(Screen.LoginScreen.route) { inclusive = true }
+                popUpTo(Screen.SplashScreen.route) { inclusive = true }
             }
         }
-
     }
+
+
+//    LaunchedEffect(loginState) {
+//
+//        delay(2000)
+//        if (loginState==true){
+//            navController.navigate(Screen.MainScreen.route) {
+//                popUpTo(Screen.MainScreen.route) { inclusive = true }
+//            }
+//        }else{
+//            navController.navigate(Screen.LoginScreen.route) {
+//                popUpTo(Screen.LoginScreen.route) { inclusive = true }
+//            }
+//        }
+//
+//    }
 
     Box(
         modifier = Modifier.fillMaxSize(),

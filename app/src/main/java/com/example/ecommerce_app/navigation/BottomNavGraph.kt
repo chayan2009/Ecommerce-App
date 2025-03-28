@@ -13,18 +13,21 @@ import com.example.ecommerce_app.feature_product.presentation.screen.ProductDeta
 import com.example.ecommerce_app.feature_product.presentation.screen.ProductListScreen
 import com.example.ecommerce_app.feature_account.AccountScreen
 import com.example.ecommerce_app.feature_account.notification.presentation.NotificationsScreen
-import com.example.ecommerce_app.feature_account.myorder.presentation.OrdersScreen
-import com.example.ecommerce_app.feature_account.myorder.presentation.SettingsScreen
+import com.example.ecommerce_app.feature_account.history.presentation.OrdersScreen
+import com.example.ecommerce_app.feature_account.profile.EditProfileScreen
+import com.example.ecommerce_app.feature_account.setting.SettingsScreen
 import com.example.ecommerce_app.wishlist.presentation.FavouriteScreen
 
 @Composable
-fun BottomNavGraph(navController: NavHostController) {
+fun BottomNavGraph(navController: NavHostController,
+                   rootNavController: NavHostController? = null) {
     NavHost(navController = navController, startDestination = BottomNavItem.Home.route) {
         composable(BottomNavItem.Home.route) { ProductListScreen(navController, hiltViewModel()) }
         composable(BottomNavItem.shop.route) { CategoryScreen(navController) }
         composable(BottomNavItem.Cart.route) { CartListScreen(navController) }
         composable(BottomNavItem.wishlist.route) { FavouriteScreen(navController) }
         composable(BottomNavItem.Profile.route) { AccountScreen(navController) }
+        composable("edit_profile_screen") { EditProfileScreen(navController) }
 
         composable("wishlist/{id}") { backStackEntry ->
             FavouriteScreen(navController)
@@ -47,7 +50,7 @@ fun BottomNavGraph(navController: NavHostController) {
         }
 
         composable("settings") { backStackEntry ->
-            SettingsScreen(navController)
+            SettingsScreen(navController,rootNavController, hiltViewModel())
         }
 
         composable("orders") { backStackEntry ->
@@ -56,7 +59,6 @@ fun BottomNavGraph(navController: NavHostController) {
         composable("notifications") { backStackEntry ->
             NotificationsScreen(navController, hiltViewModel())
         }
-
     }
 }
 

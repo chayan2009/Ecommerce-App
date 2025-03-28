@@ -7,9 +7,9 @@ import androidx.compose.ui.test.performClick
 import androidx.navigation.NavController
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.ecommerce_app.MainActivity
-import com.example.ecommerce_app.feature_account.myorder.OrderStatus
-import com.example.ecommerce_app.feature_account.myorder.model.Order
-import com.example.ecommerce_app.feature_account.myorder.viewmodel.OrdersScreenViewModel
+import com.example.ecommerce_app.feature_account.history.OrderStatus
+import com.example.ecommerce_app.feature_account.history.model.Order
+import com.example.ecommerce_app.feature_account.history.viewmodel.OrdersScreenViewModel
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import kotlinx.coroutines.flow.MutableStateFlow

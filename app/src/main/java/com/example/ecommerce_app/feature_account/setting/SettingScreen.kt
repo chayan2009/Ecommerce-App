@@ -1,4 +1,4 @@
-package com.example.ecommerce_app.feature_account.myorder.presentation
+package com.example.ecommerce_app.feature_account.setting
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -33,10 +33,16 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.ecommerce_app.core.common.Appbar
+import com.example.ecommerce_app.feature_account.setting.viewmodel.SettingsScreenViewModel
 
 @Composable
-fun SettingsScreen(navController: NavController) {
+fun SettingsScreen(
+    navController: NavController,
+    rootNavController: NavHostController?,
+    settingsScreenViewModel: SettingsScreenViewModel
+) {
     var firstName by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var showPassword by remember { mutableStateOf(false) }
@@ -106,7 +112,14 @@ fun SettingsScreen(navController: NavController) {
             Text("Preferences", fontSize = 20.sp, color = Color.Black)
 
             Spacer(modifier = Modifier.height(12.dp))
-            SettingsOption("Logout", isLogout = true) {  }
+            SettingsOption("Logout", isLogout = true) {
+                settingsScreenViewModel.logout()
+                rootNavController?.navigate("auth") {
+                    popUpTo(rootNavController.graph.startDestinationId) {
+                        inclusive = true
+                    }
+                }
+            }
         }
     }
 }
@@ -124,7 +137,6 @@ fun SettingsOption(title: String, isLogout: Boolean = false, onClick: () -> Unit
     ) {
         Text(title, fontSize = 16.sp, color = if (isLogout) Color.Red else Color.Black)
     }
-
     Spacer(modifier = Modifier.height(8.dp))
     Divider(color = Color.Gray.copy(alpha = 0.3f), thickness = 1.dp)
 }

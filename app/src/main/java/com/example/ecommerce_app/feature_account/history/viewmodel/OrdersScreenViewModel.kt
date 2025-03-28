@@ -1,9 +1,9 @@
-package com.example.ecommerce_app.feature_account.myorder.viewmodel
+package com.example.ecommerce_app.feature_account.history.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.example.ecommerce_app.core.datastore.UserPreferences
-import com.example.ecommerce_app.feature_account.myorder.OrderStatus
-import com.example.ecommerce_app.feature_account.myorder.model.Order
+import com.example.ecommerce_app.feature_account.history.OrderStatus
+import com.example.ecommerce_app.feature_account.history.model.Order
 import com.example.ecommerce_app.feature_account.notification.model.NotificationItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
