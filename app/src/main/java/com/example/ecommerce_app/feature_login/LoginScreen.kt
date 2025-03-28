@@ -40,7 +40,7 @@ fun LoginScreen(navController: NavHostController, viewModel: LoginViewModel = hi
     }
 
     val gradientBrush = Brush.verticalGradient(
-        colors = listOf(Color(0xFF6DD5FA), Color(0xFFD3D3D3)), // Light Blue to Light Gray
+        colors = listOf(Color(0xFF6DD5FA), Color(0xFFD3D3D3)),
         startY = 0f,
         endY = 1000f
     )

@@ -1,14 +1,17 @@
-package com.example.ecommerce_app.feature_signup
+package com.example.ecommerce_app.feature_signup.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.ecommerce_app.core.common.ValidationUtil
+import com.example.ecommerce_app.core.datastore.UserPreferences
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor() : ViewModel() {
+class SignUpViewModel @Inject constructor(val userPreferences: UserPreferences) : ViewModel() {
 
     private val _name = MutableStateFlow("")
     val name: StateFlow<String> = _name
@@ -47,7 +50,12 @@ class SignUpViewModel @Inject constructor() : ViewModel() {
         val nameValid = ValidationUtil.validateUsername(_name.value) == null
         val emailValid = ValidationUtil.validateUsername(_email.value) == null
         val passwordValid = ValidationUtil.validatePassword(_password.value) == null
-
         return nameValid && emailValid && passwordValid
+    }
+
+     fun saveUserIDPassword() {
+        viewModelScope.launch {
+            userPreferences.saveUserCredentials(_name.value, _password.value)
+        }
     }
 }
