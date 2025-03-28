@@ -40,13 +40,19 @@ fun CartListScreen(
     }
 
     Scaffold(
-        topBar = { Appbar("My Bag", navController = navController, cartCount = cartCount.size,onSearchQueryChanged = { searchQuery = it }) }
+        topBar = {
+            Appbar(
+                title = "My Bag",
+                navController = navController,
+                cartCount = cartCount.size,
+                onSearchQueryChanged = { searchQuery = it }
+            )
+        }
     ) { paddingValues ->
-
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues),
+                .padding(paddingValues)
         ) {
             if (isLoading) {
                 CircularProgressIndicator(modifier = Modifier.fillMaxSize())
@@ -58,7 +64,10 @@ fun CartListScreen(
                     color = Color.Red
                 )
             } else {
-                LazyColumn {
+                LazyColumn(
+                    modifier = Modifier
+                        .weight(1f)
+                ) {
                     items(cartItems) { cartItem ->
                         CartItemRow(cartItem, cartViewModel)
                     }
@@ -68,4 +77,5 @@ fun CartListScreen(
         }
     }
 }
+
 

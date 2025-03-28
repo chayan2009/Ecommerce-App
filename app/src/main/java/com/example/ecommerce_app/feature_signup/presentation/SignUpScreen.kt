@@ -121,8 +121,8 @@ fun SignUpScreen(navController: NavHostController, viewModel: SignUpViewModel = 
                     if (viewModel.validateForm()) {
                         viewModel.saveUserIDPassword()
                         Toast.makeText(context, "Sign Up Successful", Toast.LENGTH_SHORT).show()
-                        navController.navigate(Screen.MainScreen.route) {
-                            popUpTo(Screen.MainScreen.route) { inclusive = true }
+                        navController.navigate(Screen.LoginScreen.route) {
+                            popUpTo(Screen.LoginScreen.route) { inclusive = true }
                         }
                     } else {
                         Toast.makeText(context, "Sign Up not Successful", Toast.LENGTH_SHORT).show()

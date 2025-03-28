@@ -52,7 +52,14 @@ class LoginViewModel @Inject constructor(
     }
 
     private suspend fun performLogin(username: String, password: String): Boolean {
-        return username == "chayan" && password == "chayan123"
+        val savedUsername = userPreferences.getSavedUsername().firstOrNull()
+        val savedPassword = userPreferences.getSavedPassword().firstOrNull()
+
+        return if (savedUsername != null && savedPassword != null) {
+            username == savedUsername && password == savedPassword
+        } else {
+            username == "chayan" && password == "chayan123"
+        }
     }
 
     private fun saveUserCredentials(username: String, password: String) {
