@@ -3,6 +3,8 @@ package com.example.ecommerce_app.feature_splash
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
+import androidx.navigation.testing.TestNavHostController
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.ecommerce_app.MainActivity
 import dagger.hilt.android.testing.HiltAndroidRule
@@ -22,9 +24,14 @@ class SplashScreenTest {
     @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
+    private lateinit var navController: TestNavHostController
+
     @Before
     fun setup() {
         hiltRule.inject()
+        navController = TestNavHostController(
+            ApplicationProvider.getApplicationContext()
+        )
     }
 
     @Test

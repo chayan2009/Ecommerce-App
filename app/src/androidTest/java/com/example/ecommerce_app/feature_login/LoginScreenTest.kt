@@ -2,6 +2,8 @@ package com.example.ecommerce_app.feature_login
 
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.navigation.testing.TestNavHostController
+import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.example.ecommerce_app.MainActivity
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -21,9 +23,14 @@ class LoginScreenTest {
     @get:Rule(order = 1)
     val composeTestRule = createAndroidComposeRule<MainActivity>()
 
+    private lateinit var navController: TestNavHostController
+
     @Before
     fun setup() {
         hiltRule.inject()
+        navController = TestNavHostController(
+            ApplicationProvider.getApplicationContext()
+        )
     }
 
     @Test
