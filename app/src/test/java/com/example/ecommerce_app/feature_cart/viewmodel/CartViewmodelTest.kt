@@ -70,7 +70,6 @@ class CartViewModelTest {
         viewModel.addCartItem(existingItem)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        // Verify quantity increased
         assertEquals(2, viewModel.carts.value.first { it.id == existingItem.id }.quantity)
         coVerify { getCartsUseCase.addCartItem(existingItem) }
     }
@@ -91,8 +90,6 @@ class CartViewModelTest {
 
         viewModel.addCartItem(newItem)
         testDispatcher.scheduler.advanceUntilIdle()
-
-        // Verify new item added
         assertEquals(3, viewModel.carts.value.size)
         assertEquals(1, viewModel.carts.value.first { it.id == 3 }.quantity)
         coVerify { getCartsUseCase.addCartItem(newItem) }
@@ -103,11 +100,10 @@ class CartViewModelTest {
     fun `removeCartItem should remove item when quantity is 1`() = runTest {
         testDispatcher.scheduler.advanceUntilIdle()
 
-        val itemId = 1 // Smartphone with quantity 1 initially
+        val itemId = 1
         viewModel.removeCartItem(itemId)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        // Verify item removed
         assertEquals(1, viewModel.carts.value.size)
         assertEquals(false, viewModel.carts.value.any { it.id == itemId })
         coVerify { getCartsUseCase.removeCartItem(itemId) }
@@ -118,10 +114,9 @@ class CartViewModelTest {
         testDispatcher.scheduler.advanceUntilIdle()
 
         val initialSize = viewModel.carts.value.size
-        viewModel.removeCartItem(99) // Non-existent ID
+        viewModel.removeCartItem(99)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        // Verify no changes
         assertEquals(initialSize, viewModel.carts.value.size)
         coVerify(exactly = 0) { getCartsUseCase.removeCartItem(any()) }
     }

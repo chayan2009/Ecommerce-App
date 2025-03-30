@@ -45,26 +45,6 @@ class FavouriteScreenViewModel @Inject constructor(
         }
     }
 
-//    fun addFavouritesItem(cartItem: Cart) {
-//        viewModelScope.launch {
-//            val favourite = Favourite(
-//                id = cartItem.id,
-//                title = cartItem.title,
-//                price = cartItem.price,
-//                category = cartItem.category,
-//                description = cartItem.description,
-//                image = cartItem.image
-//            )
-//            getFavouritesUseCase.addFavItem(favourite)
-//        }
-//    }
-//
-//    fun removeFavouritesItem(id: Int) {
-//        viewModelScope.launch {
-//            getFavouritesUseCase.removeFavItem(id)
-//        }
-//    }
-
     fun toggleFavorite(favourite: Favourite, isFavorite: Boolean) {
         viewModelScope.launch {
             if (isFavorite) {

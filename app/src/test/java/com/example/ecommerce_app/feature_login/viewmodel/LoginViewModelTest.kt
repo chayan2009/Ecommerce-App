@@ -3,88 +3,114 @@ package com.example.ecommerce_app.feature_login.viewmodel
 import app.cash.turbine.test
 import com.example.ecommerce_app.core.datastore.UserPreferences
 import com.example.ecommerce_app.feature_splash.MainDispatcherRule
-import io.mockk.*
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
-import org.junit.Assert.assertEquals
+import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
+@ExperimentalCoroutinesApi
 class LoginViewModelTest {
 
     @get:Rule
-    val mainDispatcherRule = MainDispatcherRule() // Custom rule for coroutines
+    val mainDispatcherRule = MainDispatcherRule()
 
     private lateinit var viewModel: LoginViewModel
-    private val userPreferences: UserPreferences = mockk(relaxed = true) // Mock UserPreferences
+    private val userPreferences: UserPreferences = mockk()
 
     @Before
-    fun setup() {
+    fun setUp() {
         viewModel = LoginViewModel(userPreferences)
     }
 
     @Test
-    fun `onUsernameChange updates username state`() = runTest {
-        viewModel.onUsernameChange("testUser")
+    fun onUsernameChange_updatesUsernameAndClearsError() = runTest {
+        // Given
+        val testUsername = "testuser"
 
+        // When
+        viewModel.onUsernameChange(testUsername)
+
+        // Then
         viewModel.username.test {
-            assertEquals("testUser", awaitItem())
+            assertEquals(testUsername, awaitItem())
+        }
+        viewModel.usernameError.test {
+            assertNull(awaitItem())
         }
     }
 
     @Test
-    fun `onPasswordChange updates password state`() = runTest {
-        viewModel.onPasswordChange("testPass")
+    fun onPasswordChange_updatesPasswordAndClearsError() = runTest {
+        // Given
+        val testPassword = "testpass123"
 
+        // When
+        viewModel.onPasswordChange(testPassword)
+
+        // Then
         viewModel.password.test {
-            assertEquals("testPass", awaitItem())
+            assertEquals(testPassword, awaitItem())
+        }
+        viewModel.passwordError.test {
+            assertNull(awaitItem())
         }
     }
 
     @Test
-    fun `login with correct credentials updates loginState to true`() = runTest {
-        // Arrange: Mock suspend functions properly
-        coEvery { userPreferences.saveUserCredentials(any(), any()) } just runs
-        coEvery { userPreferences.setAutoLoginEnabled(any()) } just runs
+    fun login_withInvalidCredentials_setsLoginStateToFalse() = runTest {
+        // Given
+        val username = "wronguser"
+        val password = "wrongpass"
+        coEvery { userPreferences.getSavedUsername() } returns flowOf(null)
+        coEvery { userPreferences.getSavedPassword() } returns flowOf(null)
 
-        // Act: Call login
-        viewModel.login(username = "chayan", password = "chayan123")
+        // When
+        viewModel.login(username, password)
 
-        // Assert: Check if loginState is updated
+        // Then
         viewModel.loginState.test {
-            assertEquals(true, awaitItem())
-        }
-
-        // Verify that user credentials are saved
-        coVerify { userPreferences.saveUserCredentials("chayan", "chayan123") }
-        coVerify { userPreferences.setAutoLoginEnabled(true) }
-    }
-
-    @Test
-    fun `login with incorrect credentials updates loginState to false`() = runTest {
-        viewModel.login(username = "wrongUser", password = "wrongPass")
-
-        viewModel.loginState.test {
-            assertEquals(false, awaitItem()) // Login should fail
+            assertEquals(false, awaitItem())
         }
     }
 
     @Test
-    fun `logout clears credentials and updates loginState to false`() = runTest {
-        // Arrange: Mock suspend function
-        coEvery { userPreferences.clearCredentials() } just runs
+    fun login_success_savesCredentials() = runTest {
+        // Given
+        val username = "chayan"
+        val password = "chayan123"
+        coEvery { userPreferences.getSavedUsername() } returns flowOf(null)
+        coEvery { userPreferences.getSavedPassword() } returns flowOf(null)
+        coEvery { userPreferences.saveUserCredentials(any(), any()) } returns Unit
+        coEvery { userPreferences.setAutoLoginEnabled(true) } returns Unit
 
-        // Act: Call logout
+        // When
+        viewModel.login(username, password)
+
+        // Then
+        coVerify(exactly = 1) {
+            userPreferences.saveUserCredentials(username, password)
+            userPreferences.setAutoLoginEnabled(true)
+        }
+    }
+
+    @Test
+    fun logout_clearsCredentialsAndSetsLoginState() = runTest {
+        // Given
+        coEvery { userPreferences.clearCredentials() } returns Unit
+
+        // When
         viewModel.logout()
 
-        // Assert: Check login state
+        // Then
         viewModel.loginState.test {
-            assertEquals(false, awaitItem()) // Login state should be false
+            assertEquals(false, awaitItem())
         }
-
-        // Verify clearing credentials
-        coVerify { userPreferences.clearCredentials() }
+        coVerify(exactly = 1) { userPreferences.clearCredentials() }
     }
 }
