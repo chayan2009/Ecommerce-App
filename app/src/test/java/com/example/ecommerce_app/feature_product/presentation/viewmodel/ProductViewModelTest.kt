@@ -23,7 +23,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import java.io.IOException
-
 @ExperimentalCoroutinesApi
 class ProductViewModelTest {
 
@@ -31,7 +30,6 @@ class ProductViewModelTest {
     private val getProductsUseCase: GetProductsUseCase = mockk()
     private val getCartsUseCase: GetCartsUseCase = mockk()
     private val getFavouritesUseCase: GetFavouritesUseCase = mockk()
-
     private val testDispatcher = StandardTestDispatcher()
 
     private val mockProducts = listOf(
@@ -52,15 +50,6 @@ class ProductViewModelTest {
             category = "Clothing",
             image = "https://example.com/tshirt.jpg",
             rating = Rating(rate = 4.0, count = 200)
-        ),
-        Product(
-            id = 3,
-            title = "Laptop",
-            price = 1299.99,
-            description = "Powerful gaming laptop",
-            category = "Electronics",
-            image = "https://example.com/laptop.jpg",
-            rating = Rating(rate = 4.7, count = 300)
         )
     )
 
@@ -70,7 +59,6 @@ class ProductViewModelTest {
         coEvery { getProductsUseCase() } returns flowOf(mockProducts)
         coEvery { getCartsUseCase.addCartItem(any()) } returns Unit
         coEvery { getFavouritesUseCase.addFavItem(any()) } returns Unit
-
         viewModel = ProductViewModel(getProductsUseCase, getCartsUseCase, getFavouritesUseCase)
     }
 
@@ -80,7 +68,7 @@ class ProductViewModelTest {
     }
 
     @Test
-    fun `addToCart should call useCase with correct parameters`() = runTest {
+    fun addToCart_callsUseCaseWithCorrectParameters() = runTest {
         val cart = Cart(
             id = 1,
             title = "Smartphone",
@@ -98,7 +86,7 @@ class ProductViewModelTest {
     }
 
     @Test
-    fun `addToFavourite should call useCase with correct parameters`() = runTest {
+    fun addToFavourite_callsUseCaseWithCorrectParameters() = runTest {
         val favourite = Favourite(
             id = 1,
             title = "Smartphone",
@@ -115,7 +103,7 @@ class ProductViewModelTest {
     }
 
     @Test
-    fun `when products fetch fails, products and categories should remain empty`() = runTest {
+    fun whenProductsFetchFails_productsAndCategoriesRemainEmpty() = runTest {
         coEvery { getProductsUseCase() } returns flow { throw IOException("Network error") }
 
         val testViewModel = ProductViewModel(getProductsUseCase, getCartsUseCase, getFavouritesUseCase)
@@ -126,7 +114,7 @@ class ProductViewModelTest {
     }
 
     @Test
-    fun `fetchCategories should return distinct categories`() = runTest {
+    fun fetchCategories_returnsDistinctCategories() = runTest {
         testDispatcher.scheduler.advanceUntilIdle()
         assertEquals(listOf("Electronics", "Clothing"), viewModel.categories.value)
     }

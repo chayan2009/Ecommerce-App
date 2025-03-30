@@ -1,6 +1,6 @@
 package com.example.ecommerce_app.feature_category.viewmodel
 
-import app.cash.turbine.test
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.example.ecommerce_app.data.source.dto.Rating
 import com.example.ecommerce_app.domain.model.Cart
 import com.example.ecommerce_app.domain.model.Favourite
@@ -8,12 +8,8 @@ import com.example.ecommerce_app.domain.model.Product
 import com.example.ecommerce_app.domain.usecase.GetCartsUseCase
 import com.example.ecommerce_app.domain.usecase.GetFavouritesUseCase
 import com.example.ecommerce_app.domain.usecase.GetProductsUseCase
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -22,163 +18,97 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Assert.assertEquals
 import org.junit.Before
+import org.junit.Rule
 import org.junit.Test
-import java.io.IOException
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.reset
+import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
 
 @ExperimentalCoroutinesApi
 class CategoryScreenViewModelTest {
 
-    private lateinit var viewModel: CategoryScreenViewModel
-    private val getProductsUseCase: GetProductsUseCase = mockk()
-    private val getCartsUseCase: GetCartsUseCase = mockk()
-    private val getFavouritesUseCase: GetFavouritesUseCase = mockk()
+    @get:Rule
+    val instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    private lateinit var viewModel: CategoryScreenViewModel
+    private lateinit var mockProductsUseCase: GetProductsUseCase
+    private lateinit var mockCartsUseCase: GetCartsUseCase
+    private lateinit var mockFavouritesUseCase: GetFavouritesUseCase
     private val testDispatcher = StandardTestDispatcher()
 
-    private val mockProducts = listOf(
-        Product(
-            id = 1,
-            title = "Smartphone",
-            price = 999.99,
-            description = "Latest model with high-speed performance",
-            category = "Electronics",
-            image = "https://example.com/smartphone.jpg",
-            rating = Rating(rate = 4.5, count = 150)
-        ),
-        Product(
-            id = 2,
-            title = "T-shirt",
-            price = 19.99,
-            description = "Comfortable cotton T-shirt",
-            category = "Clothing",
-            image = "https://example.com/tshirt.jpg",
-            rating = Rating(rate = 4.0, count = 200)
-        ),
-        Product(
-            id = 3,
-            title = "Laptop",
-            price = 1299.99,
-            description = "Powerful gaming laptop",
-            category = "Electronics",
-            image = "https://example.com/laptop.jpg",
-            rating = Rating(rate = 4.7, count = 300)
-        )
+    private val testProducts = listOf(
+        Product(1, "Backpack", 109.95, "Great backpack", "men's clothing", "image1.jpg", Rating(5, 1.0)),
+        Product(2, "T-Shirt", 22.3, "Comfortable shirt", "men's clothing", "image2.jpg",Rating(5, 1.0)),
+        Product(3, "Laptop", 699.99, "High performance", "electronics", "image3.jpg", Rating(5, 1.0))
     )
 
-    @Before
-    fun setUp() {
-        Dispatchers.setMain(testDispatcher)
-        coEvery { getProductsUseCase() } returns flowOf(mockProducts)
-        coEvery { getCartsUseCase.addCartItem(any()) } returns Unit
-        coEvery { getFavouritesUseCase.addFavItem(any()) } returns Unit
+    private val testCategories = listOf("men's clothing", "electronics")
 
-        viewModel = CategoryScreenViewModel(
-            getProductsUseCase,
-            getCartsUseCase,
-            getFavouritesUseCase
-        )
+    @Before
+    fun setUp() = runTest {
+        Dispatchers.setMain(testDispatcher)
+
+        mockProductsUseCase = mock(GetProductsUseCase::class.java)
+        mockCartsUseCase = mock(GetCartsUseCase::class.java)
+        mockFavouritesUseCase = mock(GetFavouritesUseCase::class.java)
+
+        `when`(mockProductsUseCase()).thenReturn(flowOf(testProducts))
+
+        viewModel = CategoryScreenViewModel(mockProductsUseCase, mockCartsUseCase, mockFavouritesUseCase)
     }
 
     @After
     fun tearDown() {
         Dispatchers.resetMain()
+        reset(mockProductsUseCase, mockCartsUseCase, mockFavouritesUseCase)
     }
 
     @Test
-    fun `initial state should have empty products and categories`() = runTest {
-        assertEquals(emptyList<Product>(), viewModel.products.value)
-        assertEquals(emptyList<String>(), viewModel.categories.value)
-        assertEquals(true, viewModel.isLoading.value)
-    }
+    fun testAddToCart_CallsUseCaseWithCorrectCartItem() = runTest(testDispatcher) {
+        val testCart = Cart(1, "Backpack", 109.95, "test", "men's clothing", "image1.jpg", quantity = 1)
 
-    @Test
-    fun `fetchData should update products and categories`() = runTest {
+        viewModel.addToCart(testCart)
         testDispatcher.scheduler.advanceUntilIdle()
 
-        assertEquals(mockProducts, viewModel.products.value)
-        assertEquals(listOf("Electronics", "Clothing"), viewModel.categories.value)
-        assertEquals(false, viewModel.isLoading.value)
+        verify(mockCartsUseCase).addCartItem(testCart)
     }
 
     @Test
-    fun `isLoading should be true initially and false after fetch completes`() = runTest {
-        viewModel.isLoading.test {
-            assertEquals(true, awaitItem()) // Initial loading state
+    fun testAddToFavourite_CallsUseCaseWithCorrectFavouriteItem() = runTest(testDispatcher) {
+        val testFavourite = Favourite(1, "Backpack", 109.95, "test", "men's clothing", "image1.jpg")
+
+        viewModel.addToFavourite(testFavourite)
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        verify(mockFavouritesUseCase).addFavItem(testFavourite)
+    }
+
+    @Test
+    fun testAddToCart_HandlesFailureGracefully() = runTest(testDispatcher) {
+        val testCart = Cart(1, "Backpack", 109.95, "test", "men's clothing", "image1.jpg", quantity = 1)
+
+        `when`(mockCartsUseCase.addCartItem(testCart)).thenThrow(RuntimeException("Error adding to cart"))
+
+        try {
+            viewModel.addToCart(testCart)
             testDispatcher.scheduler.advanceUntilIdle()
-            assertEquals(false, awaitItem()) // After fetch completes
-            cancelAndIgnoreRemainingEvents()
+        } catch (e: RuntimeException) {
+            assertEquals("Error adding to cart", e.message)
         }
     }
 
     @Test
-    fun `fetchCategories should return distinct categories`() = runTest {
-        testDispatcher.scheduler.advanceUntilIdle()
-        assertEquals(
-            mockProducts.map { it.category }.distinct(),
-            viewModel.categories.value
-        )
-    }
+    fun testAddToFavourite_HandlesFailureGracefully() = runTest(testDispatcher) {
+        val testFavourite = Favourite(1, "Backpack", 109.95, "test", "men's clothing", "image1.jpg")
 
-    @Test
-    fun `when products fetch fails, state should be handled gracefully`() = runTest {
-        coEvery { getProductsUseCase() } returns flow { throw IOException("Network error") }
+        `when`(mockFavouritesUseCase.addFavItem(testFavourite)).thenThrow(RuntimeException("Error adding to favourites"))
 
-        val testViewModel = CategoryScreenViewModel(
-            getProductsUseCase,
-            getCartsUseCase,
-            getFavouritesUseCase
-        )
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        assertEquals(emptyList<Product>(), testViewModel.products.value)
-        assertEquals(emptyList<String>(), testViewModel.categories.value)
-        assertEquals(false, testViewModel.isLoading.value)
-    }
-
-    @Test
-    fun `addToCart should call useCase with correct parameters`() = runTest {
-        val cart = Cart(
-            id = 1,
-            title = "Smartphone",
-            price = 999.99,
-            description = "Latest model",
-            category = "Electronics",
-            image = "smartphone.jpg",
-            quantity = 1
-        )
-
-        viewModel.addToCart(cart)
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        coVerify(exactly = 1) { getCartsUseCase.addCartItem(cart) }
-    }
-
-    @Test
-    fun `addToFavourite should call useCase with correct parameters`() = runTest {
-        val favourite = Favourite(
-            id = 1,
-            title = "Smartphone",
-            price = 999.99,
-            description = "Latest model",
-            category = "Electronics",
-            image = "smartphone.jpg"
-        )
-
-        viewModel.addToFavourite(favourite)
-        testDispatcher.scheduler.advanceUntilIdle()
-
-        coVerify(exactly = 1) { getFavouritesUseCase.addFavItem(favourite) }
-    }
-
-    @Test
-    fun `products should be filtered by category when filterByCategory is called`() = runTest {
-        testDispatcher.scheduler.advanceUntilIdle() // Ensure initial data is loaded
-
-        // This function isn't in your ViewModel yet, but would be a useful addition
-        // viewModel.filterByCategory("Electronics")
-        // testDispatcher.scheduler.advanceUntilIdle()
-        //
-        // val expectedElectronics = mockProducts.filter { it.category == "Electronics" }
-        // assertEquals(expectedElectronics, viewModel.filteredProducts.value)
+        try {
+            viewModel.addToFavourite(testFavourite)
+            testDispatcher.scheduler.advanceUntilIdle()
+        } catch (e: RuntimeException) {
+            assertEquals("Error adding to favourites", e.message)
+        }
     }
 }

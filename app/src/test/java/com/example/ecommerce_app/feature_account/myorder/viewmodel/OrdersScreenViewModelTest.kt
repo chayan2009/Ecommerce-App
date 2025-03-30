@@ -25,13 +25,9 @@ class OrdersScreenViewModelTest {
 
     @Test
     fun `orders list is initialized correctly`() = runTest {
-        // Get the first emitted list
         val orders = viewModel.myOrderList.first()
-
-        // Verify list size
         assertEquals(6, orders.size)
 
-        // Verify sample order data
         assertEquals("ORD123", orders[0].id)
         assertEquals("March 20, 2025", orders[0].date)
         assertEquals("$50.00", orders[0].amount)

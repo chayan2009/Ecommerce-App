@@ -13,7 +13,6 @@ import com.example.ecommerce_app.data.db.ProductDao
 import com.example.ecommerce_app.data.repository.CartRepositoryImpl
 import com.example.ecommerce_app.data.repository.FavouritesRepositoryImpl
 import com.example.ecommerce_app.data.repository.ProductRepositoryImpl
-import com.example.ecommerce_app.data.repository.StripeRepository
 import com.example.ecommerce_app.data.source.api.ProductApi
 import com.example.ecommerce_app.domain.repository.CartRepository
 import com.example.ecommerce_app.domain.repository.FavouriteRepository
@@ -47,12 +46,6 @@ object AppModule {
     fun provideApiService(retrofit: Retrofit): ProductApi =
         retrofit.create(ProductApi::class.java)
 
-    @Provides
-    @Singleton
-    fun provideStripeRepository(@ApplicationContext context: Context
-    ): StripeRepository {
-        return StripeRepository(context)
-    }
 
     @Provides
     @Singleton
