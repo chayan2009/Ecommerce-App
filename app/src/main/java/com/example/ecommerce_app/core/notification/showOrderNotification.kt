@@ -15,8 +15,11 @@ fun showOrderNotification(context: Context) {
         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
     }
 
-    val pendingIntent: PendingIntent = PendingIntent.getActivity(
-        context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+    val pendingIntent = PendingIntent.getActivity(
+        context,
+        0,
+        intent,
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
     )
 
     val builder = NotificationCompat.Builder(context, "order_notifications")
@@ -27,21 +30,17 @@ fun showOrderNotification(context: Context) {
         .setAutoCancel(true)
         .setContentIntent(pendingIntent)
 
-    with(NotificationManagerCompat.from(context)) {
-        if (ActivityCompat.checkSelfPermission(
-                context,
-                Manifest.permission.POST_NOTIFICATIONS
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return
+    try {
+        with(NotificationManagerCompat.from(context)) {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED
+            ) {
+                notify(1, builder.build())
+            }
         }
-        notify(1, builder.build()) // Unique ID for notification
+    } catch (e: Exception) {
+        e.printStackTrace()
     }
 }

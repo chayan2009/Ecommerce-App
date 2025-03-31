@@ -92,7 +92,7 @@ fun SettingsScreen(
 
             Button(
                 onClick = {
-
+                    navController.popBackStack()
                 },
                 modifier = Modifier
                     .fillMaxWidth()

@@ -1,5 +1,11 @@
 package com.example.ecommerce_app.feature_payment.presentation
 
+import android.Manifest
+import android.app.Activity
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,8 +19,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.ecommerce_app.core.utils.Customizedbutton
-import com.example.ecommerce_app.core.notification.RequestNotificationPermission
 import com.example.ecommerce_app.core.notification.createNotificationChannel
 import com.example.ecommerce_app.core.notification.showOrderNotification
 
@@ -27,13 +34,22 @@ fun PaymentBottomSheetContent(
 ) {
     val paymentMethods = listOf("Credit Card", "Google Pay", "PayPal")
     var selectedMethod by remember { mutableStateOf(paymentMethods[0]) }
-
     val context = LocalContext.current
-    var requestPermission by remember { mutableStateOf(false) }
+    var showRationaleDialog by remember { mutableStateOf(false) }
 
-    if (requestPermission) {
-        RequestNotificationPermission()
-        requestPermission = false
+    // Create notification channel early
+    LaunchedEffect(Unit) {
+        createNotificationChannel(context)
+    }
+
+    // Create the permission launcher
+    val notificationLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isGranted ->
+        if (isGranted) {
+            showOrderNotification(context)
+        }
+        onPaymentConfirmed()
     }
 
     Column(
@@ -49,15 +65,13 @@ fun PaymentBottomSheetContent(
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable { selectedMethod = method }
-                        .padding(5.dp),
+                        .clickable { selectedMethod = method },
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     RadioButton(
                         selected = selectedMethod == method,
                         onClick = { selectedMethod = method }
                     )
-                    Spacer(modifier = Modifier.width(8.dp))
                     Text(method, fontSize = 16.sp)
                 }
             }
@@ -80,12 +94,72 @@ fun PaymentBottomSheetContent(
         Customizedbutton(
             text = "Pay Now".lowercase(),
             onClick = {
-                createNotificationChannel(context)
-                requestPermission = true
-                showOrderNotification(context)
-                onPaymentConfirmed()
+                handlePayment(
+                    context = context,
+                    onPermissionGranted = {
+                        showOrderNotification(context)
+                        onPaymentConfirmed()
+                    },
+                    onShowRationale = { showRationaleDialog = true },
+                    onPermissionDenied = { onPaymentConfirmed() },
+                    notificationLauncher = notificationLauncher
+                )
+            }
+        )
+    }
+
+    if (showRationaleDialog) {
+        AlertDialog(
+            onDismissRequest = { showRationaleDialog = false },
+            title = { Text("Notifications Needed") },
+            text = { Text("We use notifications to keep you updated about your order status.") },
+            confirmButton = {
+                Button(onClick = {
+                    showRationaleDialog = false
+                    notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                }) {
+                    Text("Allow")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    showRationaleDialog = false
+                    onPaymentConfirmed()
+                }) {
+                    Text("Continue without")
+                }
             }
         )
     }
 }
 
+private fun handlePayment(
+    context: android.content.Context,
+    onPermissionGranted: () -> Unit,
+    onShowRationale: () -> Unit,
+    onPermissionDenied: () -> Unit,
+    notificationLauncher: androidx.activity.compose.ManagedActivityResultLauncher<String, Boolean>
+) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        when {
+            ContextCompat.checkSelfPermission(
+                context,
+                Manifest.permission.POST_NOTIFICATIONS
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                onPermissionGranted()
+            }
+            ActivityCompat.shouldShowRequestPermissionRationale(
+                (context as Activity),
+                Manifest.permission.POST_NOTIFICATIONS
+            ) -> {
+                onShowRationale()
+            }
+            else -> {
+                notificationLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                onPermissionDenied()
+            }
+        }
+    } else {
+        onPermissionGranted()
+    }
+}
