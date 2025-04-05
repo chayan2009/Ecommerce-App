@@ -13,22 +13,6 @@ A **scalable E-Commerce Android application** built using **Clean Architecture p
 - **Network-Aware UI** – Responsive UI with smart network state handling.
 - **Unit & Instrumentation Testing** – Robust testing layers to ensure stability and reliability.
 
----
-
-## Tech Stack
-
-| Layer          | Technology                        |
-|----------------|-----------------------------------|
-| Language       | Kotlin                            |
-| UI             | Jetpack Compose / XML             |
-| Architecture   | Clean Architecture + MVVM         |
-| DI             | Hilt / Dagger                     |
-| Networking     | Retrofit + OkHttp + Interceptors  |
-| Local Storage  | Room                              |
-| Caching        | NetworkBoundResource pattern      |
-| Async Handling | Kotlin Coroutines + Flow          |
-| Jetpack        | ViewModel, LiveData/StateFlow, Navigation, etc.
-
 ![Screenshot_1743853528](https://github.com/user-attachments/assets/6c94b2bc-d23c-4df2-a48f-b51332929bc3)
 ![Screenshot_1743853458](https://github.com/user-attachments/assets/61c3c36b-0d13-47fc-8e4a-8519adddce29)
 ![Screenshot_1743853533](https://github.com/user-attachments/assets/af442317-2339-423b-b19a-6def94ffe8f7)
